@@ -32,51 +32,26 @@ class Photo
      */
     protected $slug;
 
-    /**
-     * Get array copy of object
-     *
-     * @return array
-     */
     public function getArrayCopy()
     {
         return get_object_vars($this);
     }
 
-    /**
-     * Get photo id
-     *
-     * @ORM\return integer
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Get photo title
-     *
-     * @ORM\return string
-     */
     public function getTitle()
     {
         return $this->title;
     }
 
-    /**
-     * Get photo slug
-     *
-     * @ORM\return string
-     */
     public function getSlug()
     {
         return $this->slug;
     }
 
-    /**
-     * Get photo image
-     *
-     * @ORM\return string
-     */
     public function getImage()
     {
         return $this->image;
