@@ -1,21 +1,11 @@
 <?php
-
 namespace App\Resource;
 
-use App\AbstractResource;
+use App\Resource\AbstractResource;
 
-/**
- * Class Resource
- * @package App
- */
 class PhotoResource extends AbstractResource
 {
-    /**
-     * @param string|null $slug
-     *
-     * @return array
-     */
-    public function get($slug)
+    public function get()
     {
         $photo = $this->entityManager->getRepository('App\Entity\Photo')->findOneBy(['slug' => $slug]);
         if ($photo) {

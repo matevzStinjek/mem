@@ -1,7 +1,10 @@
 <?php
 
+// =============================
+// format: $route => $controller
+// =============================
 $routes = [
-    '/photo'            => 'PhotosController',
+    '/photo'            => 'PhotoController',
     '/photo/{id}'       => 'PhotoController',
 ];
 
