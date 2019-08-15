@@ -1,4 +1,10 @@
 <?php
 
-$app->get('/api/photos', 'App\Action\PhotoAction:fetch');
-$app->get('/api/photos/{slug}', 'App\Action\PhotoAction:fetchOne');
+$routes = [
+    '/photo'            => 'PhotosController',
+    '/photo/{id}'       => 'PhotoController',
+];
+
+foreach($routes as $route => $controller) {
+    $app->any("/api$route","App\\Controllers\\$controller:handleRequest");
+}
