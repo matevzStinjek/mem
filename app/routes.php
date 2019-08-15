@@ -1,5 +1,7 @@
 <?php
 
+const API_PREFIX = '/api';
+
 // =============================
 // format: $route => $controller
 // =============================
@@ -9,5 +11,8 @@ $routes = [
 ];
 
 foreach($routes as $route => $controller) {
-    $app->any("/api$route","App\\Controllers\\$controller:handleRequest");
+    $app->any(API_PREFIX . $route, "App\\Controllers\\$controller:handleRequest");
 }
+
+$app->any('/api/test', 'App\\Action\\PhotoAction:fetch');
+$app->any('/api/test/{slug}', 'App\\Action\\PhotoAction:fetchOne');
