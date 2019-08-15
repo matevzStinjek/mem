@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controllers;
 
 use Slim\Http\Request;
@@ -7,13 +6,6 @@ use Slim\Http\Response;
 
 abstract class AbstractController
 {
-    // protected $em = null;
-
-    // public function __construct(PhotoResource $photoResource)
-    // {
-    //     $this->em = $entityManager;
-    // }
-
     protected static function getDefaultFields()
     {
         return null;
@@ -24,7 +16,12 @@ abstract class AbstractController
         $handlerMethod = 'handle' . $request->getMethod();
         if (method_exists($this, $handlerMethod)) {
             try {
-                return $this->$handlerMethod($request, $response, $args);
+                if (count($args)) {
+                    return $response->withJson('args');
+                } else {
+                    return $response->withJson('no args');
+                }
+                // return $this->$handlerMethod($request, $response, $args);
             } catch (Exception $e) {
                 return $response->withStatus(405, $e->getMessage());
             }
@@ -32,4 +29,6 @@ abstract class AbstractController
             return $response->withStatus(405, 'Method not allowed. Allowed methods: ...');
         }
     }
+
+    // abstract asJson
 }
