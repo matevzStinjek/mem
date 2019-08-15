@@ -5,6 +5,7 @@ const API_PREFIX = '/api';
 // =============================
 // format: $route => $controller
 // =============================
+
 $routes = [
     '/photo'            => 'PhotoController',
     '/photo/{id}'       => 'PhotoController',
