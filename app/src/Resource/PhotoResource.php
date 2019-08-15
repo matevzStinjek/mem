@@ -5,7 +5,7 @@ use App\Resource\AbstractResource;
 
 class PhotoResource extends AbstractResource
 {
-    public function get()
+    public function get($slug)
     {
         $photo = $this->entityManager->getRepository('App\Entity\Photo')->findOneBy(['slug' => $slug]);
         if ($photo) {
