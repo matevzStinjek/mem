@@ -15,27 +15,22 @@ class PhotoResource extends AbstractResource
      *
      * @return array
      */
-    public function get($slug = null)
+    public function get($slug)
     {
-        if ($slug === null) {
-            $photos = $this->entityManager->getRepository('App\Entity\Photo')->findAll();
-            $photos = array_map(
-                function ($photo) {
-                    return $photo->getArrayCopy();
-                },
-                $photos
-            );
-
-            return $photos;
-        } else {
-            $photo = $this->entityManager->getRepository('App\Entity\Photo')->findOneBy(
-                array('slug' => $slug)
-            );
-            if ($photo) {
-                return $photo->getArrayCopy();
-            }
+        $photo = $this->entityManager->getRepository('App\Entity\Photo')->findOneBy(['slug' => $slug]);
+        if ($photo) {
+            return $photo->getArrayCopy();
         }
+        return null;
+    }
 
-        return false;
+    public function getAll()
+    {
+        $photos = $this->entityManager->getRepository('App\Entity\Photo')->findAll();
+        $photos = array_map(function ($photo) {
+            return $photo->getArrayCopy();
+        }, $photos);
+
+        return $photos;
     }
 }

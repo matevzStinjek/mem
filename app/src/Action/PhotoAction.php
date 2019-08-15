@@ -14,13 +14,14 @@ final class PhotoAction
 
     public function fetch($request, $response, $args)
     {
-        $photos = $this->photoResource->get();
+        $photos = $this->photoResource->getAll();
         return $response->withJSON($photos);
     }
 
     public function fetchOne($request, $response, $args)
     {
-        $photo = $this->photoResource->get($args['slug']);
+        $slug = $args['slug'];
+        $photo = $this->photoResource->get($slug);
         if ($photo) {
             return $response->withJSON($photo);
         }

@@ -1,7 +1,6 @@
 <?php
 namespace App\Entity;
 
-use App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,17 +17,17 @@ class Photo
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string")
      */
     protected $title;
 
     /**
-     * @ORM\Column(type="string", length=150)
+     * @ORM\Column(type="string")
      */
     protected $image;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string")
      */
     protected $slug;
 
