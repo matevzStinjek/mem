@@ -23,7 +23,7 @@ $container['em'] = function ($c) {
 // Resource factories
 // -----------------------------------------------------------------------------
 
-$container['App\Action\PhotoAction'] = function ($c) {
+$container['App\Controllers\PhotoController'] = function ($c) {
     $photoResource = new \App\Resource\PhotoResource($c->get('em'));
-    return new App\Action\PhotoAction($photoResource);
+    return new App\Controllers\PhotoController($photoResource);
 };
