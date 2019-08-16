@@ -19,8 +19,13 @@ abstract class AbstractController {
         }
     }
 
-    private function getHandlerMethod($method, $hasArgs) {
+    private static function getHandlerMethod($method, $hasArgs) {
         return ($method === 'GET' && !$hasArgs) ? 'getAll' : $method;
+    }
+
+    protected static function decodeRequestBody(Request $request) {
+        $entity = json_decode($request->getBody());
+        return $entity;
     }
 
     // abstract asJson

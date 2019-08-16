@@ -6,10 +6,12 @@ function truncateAndUpgradeDatabase($code) {
 
 $code = "
     CREATE TABLE photos (
-        id char(8) CHARACTER SET ascii NOT NULL,
-        title varchar(64) COLLATE utf8_unicode_ci,
-        image varchar(150) COLLATE utf8_unicode_ci,
-        slug varchar(100) COLLATE utf8_unicode_ci,
-        PRIMARY KEY (`id`)
+        id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        title VARCHAR(255) COLLATE utf8_unicode_ci,
+        image VARCHAR(255) COLLATE utf8_unicode_ci,
+        slug VARCHAR(255) COLLATE utf8_unicode_ci,
+        parentId INT UNSIGNED,
+        creationTimestamp DATETIME NOT NULL,
+        PRIMARY KEY (id)
     );
 ";
