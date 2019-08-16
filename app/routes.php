@@ -7,8 +7,9 @@ const API_PREFIX = '/api';
 // =============================
 
 $routes = [
-    '/photo'            => 'PhotoController',
-    '/photo/{id}'       => 'PhotoController',
+    '/photos'           => 'PhotoController',
+    '/photos/{id}'      => 'PhotoController',
+    '/assets'           => 'AssetController',
 ];
 
 foreach($routes as $route => $controller) {

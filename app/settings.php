@@ -17,7 +17,17 @@ return [
                 'dbname'   => 'mem',
                 'user'     => 'root',
                 'password' => 'die2wice',
-            ]
-        ]
+            ],
+        ],
+        'aws' => [
+            's3' => [
+                'region'      => '',
+                'version'     => 'latest',
+                'credentials' => [
+                    'key'    => '',
+                    'secret' => '',
+                ],
+            ],
+        ],
     ],
 ];
