@@ -15,27 +15,34 @@ final class PhotoController extends AbstractController {
     }
 
     protected function get(Request $request, Response $response, array $args) {
-        $response->withJson('get');
+        $photo = $this->photoResource->read($args['id']);
+        $response->withJson($photo);
         return $response;
     }
 
     protected function getAll(Request $request, Response $response, array $args) {
-        $photos = $this->photoResource->getAll();
+        $photos = $this->photoResource->readAll();
         $response->withJson($photos);
         return $response;
     }
 
     protected function post(Request $request, Response $response, array $args) {
+        $entity = $this->decodeRequestBody($request);
+        $this->photoResource->create($entity);
         $response->withJson('post');
         return $response;
     }
 
-    protected function update(Request $request, Response $response, array $args) {
-        $response->withJson('update');
+    protected function put(Request $request, Response $response, array $args) {
+        $entity = $this->decodeRequestBody($request);
+        $this->photoResource->update($entity);
+        $response->withJson('put');
         return $response;
     }
 
     protected function delete(Request $request, Response $response, array $args) {
+        $entity = $this->decodeRequestBody($request);
+        $this->photoResource->remove($entity);
         $response->withJson('delete');
         return $response;
     }

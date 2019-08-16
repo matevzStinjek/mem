@@ -20,6 +20,19 @@ $container['em'] = function ($c) {
 };
 
 // -----------------------------------------------------------------------------
+// Error handling
+// -----------------------------------------------------------------------------
+
+$container['errorHandler'] = function ($c) {
+    return function ($request, $response, $exception) use ($c) {
+        return $response->withStatus(500)
+            ->withHeader('Content-Type', 'text/html')
+            ->write('API Exception: ')
+            ->write($exception->getMessage());
+    };
+};
+
+// -----------------------------------------------------------------------------
 // Resource factories
 // -----------------------------------------------------------------------------
 

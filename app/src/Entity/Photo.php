@@ -7,33 +7,34 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="photos", uniqueConstraints={@ORM\UniqueConstraint(name="photo_slug", columns={"slug"})}))
  */
-class Photo {
-    /**
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+class Photo extends Entity {
 
     /**
      * @ORM\Column(type="string")
      */
-    protected $title;
+    private $title;
 
     /**
      * @ORM\Column(type="string")
      */
-    protected $image;
+    private $image;
 
     /**
      * @ORM\Column(type="string")
      */
-    protected $slug;
+    private $slug;
 
-    public function getArrayCopy() {
-        return get_object_vars($this);
+    /**
+     * @ORM\ManyToOne(targetEntity="Photo")
+     * @ORM\JoinColumn(name="parentId")
+     */
+    private $parent;
+
+    public function __construct($slug) {
+        $this->slug = $slug;
     }
 
+    // TODO: temporary, move to abstract Entity class
     public function getId() {
         return $this->id;
     }
@@ -42,11 +43,23 @@ class Photo {
         return $this->title;
     }
 
+    public function setTitle($title) {
+        $this->title = $title;
+    }
+
     public function getSlug() {
         return $this->slug;
     }
 
     public function getImage() {
         return $this->image;
+    }
+
+    public function setImage($image) {
+        $this->image = $image;
+    }
+
+    public function getArrayCopy() {
+        return get_object_vars($this);
     }
 }
