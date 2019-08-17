@@ -21,11 +21,16 @@ return [
         ],
         'aws' => [
             's3' => [
-                'region'      => 'us-east-2',
-                'version'     => 'latest',
-                'credentials' => [
-                    'key'    => '',
-                    'secret' => '',
+                'meta' => [
+                    'bucket' => 'mem-buckoo',
+                ],
+                'connection' => [
+                    'region'      => 'us-east-1',
+                    'version'     => 'latest',
+                    'credentials' => [
+                        'key'    => 'AKIAICAFAMGRT2HJCOYQ',
+                        'secret' => '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',
+                    ],
                 ],
             ],
         ],
