@@ -1,5 +1,9 @@
+SATURDAY:
 * aws s3
-* implement a user
 * many to many test
+* implement a user
+
+SUNDAY:
 * permissions
 * .env
+...

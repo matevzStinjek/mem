@@ -21,7 +21,7 @@ return [
         ],
         'aws' => [
             's3' => [
-                'region'      => '',
+                'region'      => 'us-east-2',
                 'version'     => 'latest',
                 'credentials' => [
                     'key'    => '',

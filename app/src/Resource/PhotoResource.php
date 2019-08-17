@@ -8,15 +8,11 @@ class PhotoResource extends AbstractResource {
 
     public function read($id) {
         $photo = $this->getEntity($id);
-        return $photo ? $photo->getArrayCopy() : null;
+        return $photo ?: null;
     }
 
     public function readAll() {
         $photos = $this->getEntities();
-        $photos = array_map(function ($photo) {
-            return $photo->getArrayCopy();
-        }, $photos);
-
         return $photos;
     }
 
