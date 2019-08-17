@@ -19,6 +19,34 @@ $container['em'] = function ($c) {
     return \Doctrine\ORM\EntityManager::create($settings['doctrine']['connection'], $config);
 };
 
+// S3
+$container['s3'] = function ($c) {
+    $settings = $c->get('settings');
+    $connection = $settings['aws']['s3']['connection'];
+    $s3Client = new Aws\S3\S3Client($connection);
+    return $s3Client;
+};
+
+// -----------------------------------------------------------------------------
+// Repository factories
+// -----------------------------------------------------------------------------
+
+$container['App\Controllers\AssetController'] = function ($c) {
+    $settings = $c->get('settings');
+    $bucket = $settings['aws']['s3']['meta']['bucket'];
+    $assetRepository = new \App\Repositories\AssetRepository($c->get('s3'), $bucket);
+    return new App\Controllers\AssetController($assetRepository);
+};
+
+// -----------------------------------------------------------------------------
+// Resource factories
+// -----------------------------------------------------------------------------
+
+$container['App\Controllers\PhotoController'] = function ($c) {
+    $photoResource = new \App\Resource\PhotoResource($c->get('em'));
+    return new App\Controllers\PhotoController($photoResource);
+};
+
 // -----------------------------------------------------------------------------
 // Error handling
 // -----------------------------------------------------------------------------
@@ -30,13 +58,4 @@ $container['errorHandler'] = function ($c) {
             ->write('API Exception: ')
             ->write($exception->getMessage());
     };
-};
-
-// -----------------------------------------------------------------------------
-// Resource factories
-// -----------------------------------------------------------------------------
-
-$container['App\Controllers\PhotoController'] = function ($c) {
-    $photoResource = new \App\Resource\PhotoResource($c->get('em'));
-    return new App\Controllers\PhotoController($photoResource);
 };
