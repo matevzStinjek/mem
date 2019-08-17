@@ -59,7 +59,11 @@ class Photo extends Entity {
         $this->image = $image;
     }
 
-    public function getArrayCopy() {
-        return get_object_vars($this);
+    public function getParent() {
+        return $this->parent;
+    }
+
+    public function setParent($parent) {
+        $this->parent = $parent;
     }
 }
