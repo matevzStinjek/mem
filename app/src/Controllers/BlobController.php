@@ -17,13 +17,13 @@ final class BlobController extends AbstractController {
     protected function get(Request $request, Response $response, array $args) {
         $blobHash = $args['hash'];
         $blob = $this->s3->retrieve($blobHash);
-        return $response->withBody($blob);
+        return $response->write($blob);
     }
 
     protected function post(Request $request, Response $response, array $args) {
         $blob = $this->decodeRequestBody($request)->blob;
         $blobHash = $this->s3->store($blob);
-        return $response->withBody(($blobHash));
+        return $response->write(($blobHash));
     }    
 
     protected function delete(Request $request, Response $response, array $args) {
