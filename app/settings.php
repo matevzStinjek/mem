@@ -15,8 +15,8 @@ return [
                 'host'     => '127.0.0.1',
                 'port'     => '3306',
                 'dbname'   => 'mem',
-                'user'     => 'root',
-                'password' => 'die2wice',
+                'user'     => getenv('DB_USER'),
+                'password' => getenv('DB_PASSWORD'),
             ],
         ],
         'aws' => [
@@ -28,8 +28,8 @@ return [
                     'region'      => 'us-east-1',
                     'version'     => 'latest',
                     'credentials' => [
-                        'key'    => 'AKIAICAFAMGRT2HJCOYQ',
-                        'secret' => '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',
+                        'key'    => getenv('AWS_KEY'),
+                        'secret' => getenv('AWS_SECRET'),
                     ],
                 ],
             ],
