@@ -31,17 +31,18 @@ $container['s3'] = function ($c) {
 // Repository factories
 // -----------------------------------------------------------------------------
 
-$container['App\Controllers\AssetController'] = function ($c) {
+$container['App\Controllers\BlobController'] = function ($c) {
     $settings = $c->get('settings');
     $bucket = $settings['aws']['s3']['meta']['bucket'];
     $assetRepository = new \App\Repositories\AssetRepository($c->get('s3'), $bucket);
-    return new App\Controllers\AssetController($assetRepository);
+    return new App\Controllers\BlobController($assetRepository);
 };
 
 // -----------------------------------------------------------------------------
 // Resource factories
 // -----------------------------------------------------------------------------
 
+// TODO: delete
 $container['App\Controllers\PhotoController'] = function ($c) {
     $photoResource = new \App\Resource\PhotoResource($c->get('em'));
     return new App\Controllers\PhotoController($photoResource);

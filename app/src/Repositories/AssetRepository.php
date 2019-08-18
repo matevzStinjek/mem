@@ -15,24 +15,28 @@ class AssetRepository {
     }
 
     public function store($blob) {
-        $key = hash('sha256', $blob);
+        $blobHash = hash('sha256', $blob);
 
-        return $this->s3->putObject([
+        $this->s3->putObject([
             'Bucket' => $this->bucket,
-            'Key'    => $key,
+            'Key'    => $blobHash,
             'Body'   => $blob,
         ]);
+
+        return $blobHash;
     }
 
     public function retrieve($key) {
-        return $this->s3->getObject([
+        $result =  $this->s3->getObject([
             'Bucket' => $this->bucket,
             'Key'    => $key,
         ]);
+
+        return $result['Body'];
     }
 
     public function delete($key) {
-        return $this->s3->getObject([
+        $this->s3->deleteObject([
             'Bucket' => $this->bucket,
             'Key'    => $key,
         ]);
