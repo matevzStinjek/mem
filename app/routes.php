@@ -7,9 +7,18 @@ const API_PREFIX = '/api';
 // =============================
 
 $routes = [
-    '/photos'           => 'PhotoController',
-    '/photos/{id}'      => 'PhotoController',
-    '/assets'           => 'AssetController',
+    // (temporary) TODO: delete 
+    '/photos'               => 'PhotoController',
+    '/photos/{id}'          => 'PhotoController',
+
+    // '/folders'              => 'FolderController',
+    // '/folders/{id}'         => 'FolderController',
+
+    // '/folderContent'        => 'FolderController',
+    // '/folderContent/{id}'   => 'FolderController',
+
+    '/blobs'                => 'BlobController',
+    '/blobs/{hash}'         => 'BlobController',
 ];
 
 foreach($routes as $route => $controller) {
