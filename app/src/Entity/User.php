@@ -5,12 +5,6 @@ use App\Util\Validator;
 use App\Util\Util;
 use Doctrine\ORM\Mapping as ORM;
 
-// ====================
-// --------------------
-//       UNTESTED
-// --------------------
-// ====================
-
 /**
  * @ORM\Entity
  * @ORM\Table(name="users")
