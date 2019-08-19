@@ -60,19 +60,10 @@ class User extends Entity {
     }
 
     public function setName($name) {
-        if (!is_string($name)) {
-            throw new \Exception('Name must be a string.');
-        }
-
-        $name = trim($name);
-        $name = \Normalizer::normalize($name);
-
-        if (!strlen($name)) {
-            throw new \Exception('Name cannot be empty.');
-        }
-
-        if (strlen($name) > 255) {
-            throw new \Exception('Name cannot be longer than 255 characters.');
+        try {
+            Validator::name($name);
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage());
         }
 
         $this->name = $name;
@@ -158,5 +149,9 @@ class User extends Entity {
 
     public function getUserGroups() {
         return $this->userGroups;
+    }
+
+    public function getCreationTimestamp() {
+        return $this->creationTimestamp;
     }
 }
