@@ -1,13 +1,10 @@
-SATURDAY:
-* blob <> assetcontroller <> foldercontent relationship
-* user <> usergroup <> foldermembership relationship
-* many to many test
-* implement a user
-
 SUNDAY:
-* permissions
+* usergroup <> folderMembership <> folder
+* blob <> assetcontroller <> foldercontent relationship
+* UserGroupController.php && Resource
+
+SOMEDAY:
+* advanced permissions
 * rest of the fucking api
 * facebook login integration
-* .env
-
 * dependencies --> Application.php

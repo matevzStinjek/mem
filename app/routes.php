@@ -10,11 +10,8 @@ $routes = [
     '/users'                => 'UserController',
     '/users/{id}'           => 'UserController',
 
-    // '/folders'              => 'FolderController',
-    // '/folders/{id}'         => 'FolderController',
-
-    // '/folderContent'        => 'FolderController',
-    // '/folderContent/{id}'   => 'FolderController',
+    '/folders'              => 'FolderController',
+    '/folders/{id}'         => 'FolderController',
 
     '/blobs'                => 'BlobController',
     '/blobs/{hash}'         => 'BlobController',

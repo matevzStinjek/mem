@@ -47,6 +47,11 @@ $container['App\Controllers\UserController'] = function ($c) {
     return new App\Controllers\UserController($userResource);
 };
 
+$container['App\Controllers\FolderController'] = function ($c) {
+    $folderResource = new \App\Resource\FolderResource($c->get('em'));
+    return new App\Controllers\FolderController($folderResource);
+};
+
 // -----------------------------------------------------------------------------
 // Error handling
 // -----------------------------------------------------------------------------

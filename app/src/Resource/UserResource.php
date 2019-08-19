@@ -2,7 +2,6 @@
 namespace App\Resource;
 
 use App\Entity\User;
-use App\Resource\AbstractResource;
 
 class UserResource extends AbstractResource {
 
@@ -70,8 +69,6 @@ class UserResource extends AbstractResource {
 
         return $id;
     }
-
-    // // CRUD: create read update delete
 
     private function getEntity($id) {
         return $this->em->createQueryBuilder()

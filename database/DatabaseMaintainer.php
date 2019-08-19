@@ -43,3 +43,16 @@ $code .= "
 ";
 
 $code .= "INSERT INTO userGroupsMemberships VALUES(1,1);";
+
+$code .= "
+    CREATE TABLE folders (
+        id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        name VARCHAR(255) COLLATE utf8_unicode_ci,
+        creatorId INT UNSIGNED NOT NULL,
+        creationTimestamp DATETIME NOT NULL,
+        PRIMARY KEY (id),
+        CONSTRAINT folders_creatorId_fk FOREIGN KEY (creatorId) REFERENCES users (id)
+    );
+";
+
+$code .= "INSERT INTO folders VALUES(0, 'kuba', 1, NOW());";

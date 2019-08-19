@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="userGroups")
+ * @ORM\Table(name="folders")
  */
-class UserGroup extends Entity {
+class Folder extends Entity {
 
     /**
      * @ORM\Column(type="string")
@@ -16,20 +16,19 @@ class UserGroup extends Entity {
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="userGroups")
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="creatorId")
      */
-    private $users;
+    private $creator;
 
     /**
      * @ORM\Column(type="datetime")
      */
     private $creationTimestamp;
 
-    public function __construct($name, $users) {
-        $this->users = new ArrayCollection();
-
+    public function __construct($name, $creator) {
         $this->setName($name);
-        $this->addUsers($users);
+        $this->setCreator($creator);
         $this->creationTimestamp = new \DateTime();
     }
 
@@ -47,16 +46,12 @@ class UserGroup extends Entity {
         return $this->name;
     }
 
-    public function addUsers($users) {
-        if (!is_array($users)) {
-            throw new \Exception('Users must be an array of User entities.');
-        }
-
-        $this->users = new ArrayCollection(array_merge($this->users->toArray(), $users->toArray()));
+    public function setCreator($creator) {
+        $this->creator = $creator;
     }
 
-    public function getUsers() {
-        return $this->users;
+    public function getCreator() {
+        return $this->creator;
     }
 
     public function getCreationTimestamp() {
