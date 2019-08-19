@@ -48,15 +48,16 @@ final class UserController extends AbstractController {
         $resourceMap = [];
 
         $resourceMap += [
-            'id'    => function($user) { return $user->getId(); },
-            'name'  => function($user) { return $user->getName(); },
-            'email' => function($user) { return $user->getEmail(); },
-            'roles' => function($user) { return $user->getRoles(); },
+            'id'            => function($user) { return $user->getId(); },
+            'name'          => function($user) { return $user->getName(); },
+            'email'         => function($user) { return $user->getEmail(); },
+            'roles'         => function($user) { return $user->getRoles(); },
+            'userGroupsIds' => function($user) { return array_map(function($userGroup) { return $userGroup->getId(); }, $user->getUserGroups()->toArray()); },
         ];
 
         $ret = [];
-        foreach($resourceMap as $resource) {
-            $ret[] = $resource($user);
+        foreach($resourceMap as $key => $mapper) {
+            $ret[$key] = $mapper($user);
         }
         return $ret;
     }

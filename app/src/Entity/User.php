@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class User extends Entity {
 
     const ROLES = ['ADMIN', 'PLEB'];
+    const DEFAULT_ROELS = ['PLEB'];
 
     /**
      * @ORM\Column(type="string")
@@ -34,15 +35,27 @@ class User extends Entity {
     private $roles;
 
     /**
+     * @ORM\ManyToMany(targetEntity="UserGroup", inversedBy="users")
+     * @ORM\JoinTable(
+     *     name="userGroupsMemberships",
+     *     joinColumns={@ORM\JoinColumn(name="userId", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="userGroupId", referencedColumnName="id")}
+     *  )
+     */
+    private $userGroups;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $creationTimestamp;
 
-    public function __construct($name, $email, $password, $roles = ['PLEB']) {
+    public function __construct($name, $email, $password, $roles) {
+        $this->userGroups = new ArrayCollection;
+
         $this->setName($name);
         $this->setEmail($email);
         $this->setPassword($password);
-        $this->setRoles($roles);
+        $this->setRoles($roles ?: self::DEFAULT_ROLES);
         $this->creationTimestamp = new \DateTime();
     }
 
@@ -119,11 +132,10 @@ class User extends Entity {
 
     public function setRoles($roles) {
         if (!is_array($roles)) {
-            throw new \Exception('Roles must be an array of roles as strings');
+            throw new \Exception('Roles must be an array of roles as strings.');
         }
 
         $invalidRoles = array_udiff($roles, self::ROLES, 'strcasecmp');
-
         if (count($invalidRoles)) {
             throw new \Exception('Invalid roles: ' . implode(', ', $invalidRoles) . 'Valid roles include ' . implode(', ', self::ROLES));
         }
@@ -133,5 +145,18 @@ class User extends Entity {
 
     public function getRoles() {
         return explode(',', $this->roles);
+    }
+
+    // TODO: remove when you confirm it's redundant
+    public function addUserGroups($userGroups) {
+        if (!is_array($userGroups)) {
+            throw new \Exception('UserGroups must be an array of UserGroup entities.');
+        }
+
+        $this->userGroups = new ArrayCollection(array_merge($this->userGroups->toArray(), $userGroups->toArray()));
+    }
+
+    public function getUserGroups() {
+        return $this->userGroups;
     }
 }
