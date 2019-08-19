@@ -44,12 +44,12 @@ class User extends Entity {
      */
     private $creationTimestamp;
 
-    public function __construct($name, $email, $password, $roles) {
+    public function __construct($name, $email, $password, $roles = ['PLEB']) {
         $this->setName($name);
         $this->setEmail($email);
         $this->setPassword($password);
         $this->setRoles($roles);
-        $this->creationTimestamp  = (new \DateTime())->format('Y-m-d H:i:s');
+        $this->creationTimestamp = new \DateTime();
     }
 
     public function setName($name) {
@@ -88,14 +88,14 @@ class User extends Entity {
             throw new \Exception($e->getMessage());
         }
 
-        if (strlen($name) > 255) {
+        if (strlen($email) > 255) {
             throw new \Exception('Email cannot be longer than 255 characters.');
         }
 
         $this->email = $email;
     }
 
-    public function getEmail($email) {
+    public function getEmail() {
         return $this->email;
     }
 
@@ -104,6 +104,12 @@ class User extends Entity {
             throw new \Exception('Password must be a string.');
         }
 
+        $password = trim($password);
+        $password = \Normalizer::normalize($password);
+
+        if (strlen($password) < 6) {
+            throw new \Exception('Password cannot be shorter than 6 characters.');
+        }
         // TODO: add criteria!
 
         $this->passwordHash = Util::hashPassword($password);
@@ -128,7 +134,7 @@ class User extends Entity {
             throw new \Exception('Invalid roles: ' . implode(', ', $invalidRoles) . 'Valid roles include ' . implode(', ', self::ROLES));
         }
 
-        $this->roles = implode(',', $roels);
+        $this->roles = implode(',', $roles);
     }
 
     public function getRoles() {

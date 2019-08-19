@@ -30,12 +30,12 @@ class PhotoResource extends AbstractResource {
         return $photo;
     }
 
-    public function update($entity) {
-        if (!isset($entity->id)) {
+    public function update($id, $entity) {
+        if (is_null($id)) {
             throw new \Exception('Id is required!');
         }
 
-        $photo = $this->getEntity($entity->id);
+        $photo = $this->getEntity($id);
 
         if (isset($entity->image)) {
             $photo->setImage($entity->image);
@@ -47,15 +47,17 @@ class PhotoResource extends AbstractResource {
         return $photo;
     }
 
-    public function remove($entity) {
+    public function remove($id) {
         if (!isset($entity->id)) {
             throw new \Exception('Id is required!');
         }
 
-        $photo = $this->getEntity($entity->id);
+        $photo = $this->getEntity($id);
 
         $this->em->remove($photo);
         $this->em->flush();
+
+        return $id;
     }
 
     // CRUD: create read update delete

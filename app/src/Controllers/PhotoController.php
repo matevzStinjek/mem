@@ -18,39 +18,32 @@ final class PhotoController extends AbstractController {
     protected function get(Request $request, Response $response, array $args) {
         $photo = $this->photoResource->read($args['id']);
         $json = self::asJson($photo);
-        $response->withJson($json);
-        return $response;
+        return $response->withJson($json);
     }
 
     protected function getAll(Request $request, Response $response, array $args) {
         $photos = $this->photoResource->readAll();
         $json = array_map(function($photo) { return self::asJson($photo); }, $photos);
-        $response->withJson($json);
-        return $response;
+        return $response->withJson($json);
     }
 
     protected function post(Request $request, Response $response, array $args) {
         $entity = $this->decodeRequestBody($request);
         $photo = $this->photoResource->create($entity);
         $json = self::asJson($photo);
-        $response->withJson($json);
-        return $response;
+        return $response->withJson($json);
     }
 
     protected function put(Request $request, Response $response, array $args) {
         $entity = $this->decodeRequestBody($request);
         $photo = $this->photoResource->update($entity);
         $json = self::asJson($photo);
-        $response->withJson($json);
-        return $response;
+        return $response->withJson($json);
     }
 
     protected function delete(Request $request, Response $response, array $args) {
-        $entity = $this->decodeRequestBody($request);
-        $photo = $this->photoResource->remove($entity);
-        $json = self::asJson($photo);
-        $response->withJson($json);
-        return $response;
+        $photoId = $this->photoResource->remove($args['id']);
+        return $response->write($photoId);
     }
 
     public static function asJson(Photo $photo) {

@@ -11,6 +11,9 @@ $routes = [
     '/photos'               => 'PhotoController',
     '/photos/{id}'          => 'PhotoController',
 
+    '/users'                => 'UserController',
+    '/users/{id}'           => 'UserController',
+
     // '/folders'              => 'FolderController',
     // '/folders/{id}'         => 'FolderController',
 
