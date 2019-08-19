@@ -42,10 +42,15 @@ $container['App\Controllers\BlobController'] = function ($c) {
 // Resource factories
 // -----------------------------------------------------------------------------
 
-// TODO: delete
+// TODO: delete this one
 $container['App\Controllers\PhotoController'] = function ($c) {
     $photoResource = new \App\Resource\PhotoResource($c->get('em'));
     return new App\Controllers\PhotoController($photoResource);
+};
+
+$container['App\Controllers\UserController'] = function ($c) {
+    $userResource = new \App\Resource\UserResource($c->get('em'));
+    return new App\Controllers\UserController($userResource);
 };
 
 // -----------------------------------------------------------------------------
