@@ -7,10 +7,6 @@ const API_PREFIX = '/api';
 // =============================
 
 $routes = [
-    // (temporary) TODO: delete 
-    '/photos'               => 'PhotoController',
-    '/photos/{id}'          => 'PhotoController',
-
     '/users'                => 'UserController',
     '/users/{id}'           => 'UserController',
 
