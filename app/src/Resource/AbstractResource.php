@@ -15,9 +15,9 @@ abstract class AbstractResource {
         return null;
     }
 
+    // shared sorting rules
+
+    // shared filtering rules
+
     // abstract getEntity
-
-    // sorting rules
-
-    // filtering rules
 }

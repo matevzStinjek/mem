@@ -2,6 +2,8 @@
 namespace App\Resource;
 
 use App\Entity\User;
+use App\Helpers\FilteringHelper;
+use Doctrine\ORM\QueryBuilder;
 
 class UserResource extends AbstractResource {
 
@@ -10,8 +12,10 @@ class UserResource extends AbstractResource {
         return $user ?: null;
     }
 
-    public function readAll() {
-        $users = $this->getEntities();
+    public function readAll($params) {
+        $qb = $this->em->createQueryBuilder()->select('user')->from('App\Entity\User', 'user');
+        $qb = FilteringHelper::applyRules($qb, $params, self::getFilteringRules());
+        $users = $qb->getQuery()->getResult();
         return $users;
     }
 
@@ -83,10 +87,14 @@ class UserResource extends AbstractResource {
         //                   ->getQuery()->getOneOrNullResult();
     }
 
-    private function getEntities() {
-        return $this->em->createQueryBuilder()
-                        ->select('user')
-                        ->from('App\Entity\User', 'user')
-                        ->getQuery()->getResult();
+    private function getFilteringRules() {
+        $rules = [
+            'roles' => function(QueryBuilder $qb, $filterValue) {
+                $roles = explode(',', $filterValue);
+                return $qb->andWhere($qb->expr()->in('user.roles', $roles));
+            },
+        ];
+
+        return $rules;
     }
 }
