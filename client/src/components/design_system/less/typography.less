@@ -1,0 +1,56 @@
+/*---------------------------------------------------------------------------*
+ * SEGOE UI = Windows (weight mapping)
+ *---------------------------------------------------------------------------*/
+
+/* Semilight */
+@font-face {font-family: "Segoe UI map-weights"; font-weight: 300; src: local("Segoe UI Semilight"), local("SegoeUI-Semilight");}
+/* Regular */
+@font-face {font-family: "Segoe UI map-weights"; font-weight: 400; src: local("Segoe UI");}
+/* Medium */
+@font-face {font-family: "Segoe UI map-weights"; font-weight: 500; src: local("Segoe UI Semibold"), local("SegoeUI-Semibold");}
+/* Bold */
+@font-face {font-family: "Segoe UI map-weights"; font-weight: 700; src: local("Segoe UI Bold"), local("SegoeUI-Bold");}
+
+
+/*---------------------------------------------------------------------------*
+ * ROBOTO = Android (weight mapping)
+ *---------------------------------------------------------------------------*/
+
+/* Semilight */
+@font-face {font-family: "Roboto map-weights"; font-weight: 300; src: local("Roboto Light"), local("Roboto-Light");}
+/* Regular */
+@font-face {font-family: "Roboto map-weights"; font-weight: 400; src: local("Roboto"), local("Roboto-Regular");}
+/* Medium */
+@font-face {font-family: "Roboto map-weights"; font-weight: 500; src: local("Roboto Medium"), local("Roboto-Medium");}
+/* Bold */
+@font-face {font-family: "Roboto map-weights"; font-weight: 700; src: local("Roboto Bold"), local("Roboto-Bold");}
+
+.dashboard-font-stack() {
+    /*
+     system-ui, -apple-system, BlinkMacSystemFont, // San Francisco for iOS/macOS
+     "Segoe UI map-weights", "Segoe UI", // Segoe UI for Windows, map font-weight: 500 to Semibold or fallback to default weight mapping
+     "Roboto map-weights", "Roboto", // Roboto for Android, map font-weight: 500 to Medium or fallback to default weight mapping
+     "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif; // Others, no weight mapping
+     */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI map-weights", "Segoe UI", "Roboto map-weights", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;   // lesshint spaceAroundOperator: false
+}
+
+.light-font() {
+    .dashboard-font-stack();
+    font-weight: 300;
+}
+
+.regular-font() {
+    .dashboard-font-stack();
+    font-weight: 400;
+}
+
+.medium-font() {
+    .dashboard-font-stack();
+    font-weight: 500;
+}
+
+.bold-font() {
+    .dashboard-font-stack();
+    font-weight: 700;
+}
