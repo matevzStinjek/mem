@@ -3,15 +3,24 @@ import axios from 'axios'
 class ApiClient {
 
     get (url) {
-        return this._postRequest('GET', url, null, config)
+        return this._postRequest('GET', url)
     }
 
-    _postRequest (method, url, body = null) {
-        return axios({
-            method,
-            url,
-            data: body,
-        })
+    post (url, body) {
+        return this._postRequest('POST', url, body)
+    }
+
+    put (url, body) {
+        return this._postRequest('PUT', url, body)
+    }
+
+    delete (url) {
+        return this._postRequest('DELETE', url)
+    }
+
+    _postRequest (method, url, data = null) {
+        url = `api/${url}`
+        return axios({ method, url, data })
     }
 }
 
