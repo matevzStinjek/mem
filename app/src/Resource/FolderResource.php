@@ -11,7 +11,8 @@ class FolderResource extends AbstractResource {
     }
 
     public function readAll() {
-        $folders = $this->getEntities();
+        $qb = $this->em->createQueryBuilder()->select('folder')->from('App\Entity\Folder', 'folder');
+        $folders = $qb->getQuery()->getResult();
         return $folders;
     }
 
@@ -88,12 +89,5 @@ class FolderResource extends AbstractResource {
         // return $request->user->getPermissions()->getVisibleRegisteredUsersQueryBuilder($request->em)
         //                   ->andWhere('registeredUser.id = :id')->setParameter('id', $this->id)
         //                   ->getQuery()->getOneOrNullResult();
-    }
-
-    private function getEntities() {
-        return $this->em->createQueryBuilder()
-                        ->select('folder')
-                        ->from('App\Entity\Folder', 'folder')
-                        ->getQuery()->getResult();
     }
 }

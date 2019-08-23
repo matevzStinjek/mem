@@ -22,7 +22,8 @@ final class UserController extends AbstractController {
     }
 
     protected function getAll(Request $request, Response $response, array $args) {
-        $users = $this->userResource->readAll();
+        $params = $request->getParams();
+        $users = $this->userResource->readAll($params);
         $json = array_map(function($user) { return self::asJson($user); }, $users);
         return $response->withJson($json);
     }

@@ -56,3 +56,30 @@ $code .= "
 ";
 
 $code .= "INSERT INTO folders VALUES(0, 'kuba', 1, NOW());";
+
+// \\ TODO
+$code .= "
+    CREATE TABLE folderMemberships (
+        id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        userId INT UNSIGNED,
+        userGroupId INT UNSIGNED,
+        folderId INT UNSIGNED NOT NULL,
+        PRIMARY KEY (id),
+        ...
+    );
+";
+// \\ TODO
+
+$code .= "
+    CREATE TABLE foldersContent (
+        blobHash char(64) COLLATE utf8_unicode_ci NOT NULL,
+        folderId INT UNSIGNED NOT NULL,
+        uploaderId INT UNSIGNED NOT NULL,
+        creationTimestamp DATETIME NOT NULL,
+        PRIMARY KEY (blobHash),
+        CONSTRAINT folderContent_folderId_fk FOREIGN KEY (folderId) REFERENCES folders (id),
+        CONSTRAINT folderContent_uploaderId_fk FOREIGN KEY (uploaderId) REFERENCES users (id)
+    );
+";
+
+$code .= "INSERT INTO foldersContent VALUES('199f25fd69940560d438a6d7d3ace16e3cb4eab9cf2ad6ff069ccdc0585bb8b3', 1, 1, NOW());";
