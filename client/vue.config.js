@@ -1,5 +1,8 @@
+const path = require('path')
+
 module.exports = {
-    configureWebpack: config => {
-        config.resolve.alias['design-system'] = path.resolve(__dirname, './components/design_system')
+    chainWebpack: config => {
+        config.resolve.alias
+            .set('design-system', path.resolve(__dirname, 'src/components/design_system'))
     },
 }
