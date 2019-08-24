@@ -5,7 +5,6 @@ import validationGetters from './validationGetters'
 import mutations from './mutations'
 
 const store = {
-    namespaced: true,
     state: getState(),
     getters: {...getters, ...validationGetters},
     mutations,
