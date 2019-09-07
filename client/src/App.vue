@@ -5,15 +5,17 @@
 </template>
 
 <style lang="less">
+@import '~@/common/less/common';
+
 body {
     margin: 0;
-    min-height: 100vh;
 }
 #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: system-ui, 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
+    height: 100vh;
+    background-color: @main;
+    color: @white;
 }
 </style>

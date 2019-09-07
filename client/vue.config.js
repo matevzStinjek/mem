@@ -2,7 +2,7 @@ const path = require('path')
 
 module.exports = {
     publicPath: '/',
-    outputDir: '../server/public/assets',
+    // outputDir: '../server/public/assets',
     devServer: {
         proxy: {
             '/api': {
