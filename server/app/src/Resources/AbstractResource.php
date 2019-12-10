@@ -1,5 +1,6 @@
 <?php
-namespace App\Resource;
+
+namespace App\Resources;
 
 use Doctrine\ORM\EntityManager;
 

@@ -9,6 +9,7 @@ return [
                 'auto_generate_proxies' => true,
                 'proxy_dir' =>  __DIR__.'/../cache/proxies',
                 'cache' => null,
+                'simple_annotation_reader' => false,
             ],
             'connection' => [
                 'driver'   => 'pdo_mysql',
@@ -33,6 +34,9 @@ return [
                     ],
                 ],
             ],
+        ],
+        'db' => [
+            'secret' => getenv('DB_SECRET'),
         ],
     ],
 ];

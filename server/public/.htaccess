@@ -1,0 +1,4 @@
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !^/server-status$
+RewriteCond %{REQUEST_URI} !^/robots.txt$
+RewriteRule .* index.php

@@ -1,6 +1,8 @@
 <?php
-namespace App\Entity;
 
+namespace App\Model\Entities;
+
+use App\Exceptions\IllegalArgumentException;
 use App\Util\Validator;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,18 +28,18 @@ class UserGroup extends Entity {
     private $creationTimestamp;
 
     public function __construct($name, $users) {
-        $this->users = new ArrayCollection();
+        $this->users = new ArrayCollection;
 
         $this->setName($name);
         $this->addUsers($users);
-        $this->creationTimestamp = new \DateTime();
+        $this->creationTimestamp = new \DateTime;
     }
 
     public function setName($name) {
         try {
             Validator::name($name);
-        } catch (\Exception $e) {
-            throw new Exception($e->getMessage());
+        } catch (IllegalArgumentException $e) {
+            throw new IllegalArgumentException($e->getMessage());
         }
 
         $this->name = $name;
@@ -49,7 +51,7 @@ class UserGroup extends Entity {
 
     public function addUsers($users) {
         if (!is_array($users)) {
-            throw new \Exception('Users must be an array of User entities.');
+            throw new IllegalArgumentException('Users must be an array of User entities.');
         }
 
         $this->users = new ArrayCollection(array_merge($this->users->toArray(), $users->toArray()));
