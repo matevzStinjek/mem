@@ -11,14 +11,15 @@ $code .= "
         id INT UNSIGNED NOT NULL AUTO_INCREMENT,
         name VARCHAR(255) COLLATE utf8_unicode_ci,
         email VARCHAR(255) COLLATE utf8_unicode_ci,
-        passwordHash CHAR(128) COLLATE utf8_unicode_ci,
-        roles TEXT COLLATE utf8_unicode_ci,
+        passwordHash CHAR(64) COLLATE utf8_unicode_ci,
+        salt CHAR(16) COLLATE utf8_unicode_ci,
+        roles set COLLATE utf8_unicode_ci,
         creationTimestamp DATETIME NOT NULL,
         PRIMARY KEY (id)
     );
-"; // TODO: change roles TEXT to something not as hacky
+";
 
-$code .= "INSERT INTO users VALUES(0, 'admin', 'stinjek@gmail.com', '92f39f7f2a869838cd5085e6f17fc82109bcf98cd62a47cbc379e38de80bbc0213a23cee6e4a13de6caae0add8a390272d6f0883c274320b1ff60dbcfc6dd750', 'ADMIN', NOW());";
+$code .= "INSERT INTO users VALUES(0, 'admin', 'admin@mem.com', '259926f400eb547cd6b5dea51e50291f2e1d8ed8df452b7c9646ef9a8862d874', '$salt', 'ADMIN', NOW());";
 
 $code .= "
     CREATE TABLE userGroups (
@@ -32,17 +33,17 @@ $code .= "
 $code .= "INSERT INTO userGroups VALUES(0, 'tuni', NOW());";
 
 $code .= "
-    CREATE TABLE userGroupsMemberships (
+    CREATE TABLE userGroupMemberships (
         userId INT UNSIGNED NOT NULL,
         userGroupId INT UNSIGNED NOT NULL,
         PRIMARY KEY (userId,userGroupId),
-        KEY userGroupsMemberships_userGroupId_k (userGroupId),
-        CONSTRAINT userGroupsMemberships_userId_fk FOREIGN KEY (userId) REFERENCES users (id),
-        CONSTRAINT userGroupsMemberships_userGroupId_fk FOREIGN KEY (userGroupId) REFERENCES userGroups (id)
+        KEY userGroupMemberships_userGroupId_k (userGroupId),
+        CONSTRAINT userGroupMemberships_userId_fk FOREIGN KEY (userId) REFERENCES users (id),
+        CONSTRAINT userGroupMemberships_userGroupId_fk FOREIGN KEY (userGroupId) REFERENCES userGroups (id)
     );
 ";
 
-$code .= "INSERT INTO userGroupsMemberships VALUES(1,1);";
+$code .= "INSERT INTO userGroupMemberships VALUES(1,1);";
 
 $code .= "
     CREATE TABLE folders (
@@ -71,7 +72,7 @@ $code .= "
 // \\ TODO
 
 $code .= "
-    CREATE TABLE foldersContent (
+    CREATE TABLE folderContent (
         blobHash char(64) COLLATE utf8_unicode_ci NOT NULL,
         folderId INT UNSIGNED NOT NULL,
         uploaderId INT UNSIGNED NOT NULL,
@@ -82,4 +83,4 @@ $code .= "
     );
 ";
 
-$code .= "INSERT INTO foldersContent VALUES('199f25fd69940560d438a6d7d3ace16e3cb4eab9cf2ad6ff069ccdc0585bb8b3', 1, 1, NOW());";
+$code .= "INSERT INTO folderContent VALUES('199f25fd69940560d438a6d7d3ace16e3cb4eab9cf2ad6ff069ccdc0585bb8b3', 1, 1, NOW());";

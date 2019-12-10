@@ -1,6 +1,13 @@
 <?php
-namespace App\Entity;
 
+namespace App\Model\Entities;
+
+use App\Exceptions\IllegalArgumentException;
+use App\Model\Permissions\Roles;
+use App\Model\Permissions\AdminPermissions;
+use App\Model\Permissions\DemoPermissions;
+use App\Model\Permissions\UserPermissions;
+use App\Model\Permissions\SauronPermissions;
 use App\Util\Validator;
 use App\Util\Util;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,9 +17,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="users")
  */
 class User extends Entity {
-
-    const ROLES = ['ADMIN', 'PLEB'];
-    const DEFAULT_ROELS = ['PLEB'];
 
     /**
      * @ORM\Column(type="string")
@@ -49,21 +53,22 @@ class User extends Entity {
      */
     private $creationTimestamp;
 
+    private $permissionsCache;
+
     public function __construct($name, $email, $password, $roles) {
         $this->userGroups = new ArrayCollection;
 
         $this->setName($name);
         $this->setEmail($email);
         $this->setPassword($password);
-        $this->setRoles($roles ?: self::DEFAULT_ROLES);
-        $this->creationTimestamp = new \DateTime();
+        $this->creationTimestamp = new \DateTime;
     }
 
     public function setName($name) {
         try {
             Validator::name($name);
-        } catch (\Exception $e) {
-            throw new Exception($e->getMessage());
+        } catch (IllegalArgumentException $e) {
+            throw new IllegalArgumentException($e->getMessage());
         }
 
         $this->name = $name;
@@ -74,20 +79,10 @@ class User extends Entity {
     }
 
     public function setEmail($email) {
-        if (!is_string($email)) {
-            throw new \Exception('Email must be a string.');
-        }
-
-        $email = trim($email);
-
         try {
             Validator::email($email);
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
-
-        if (strlen($email) > 255) {
-            throw new \Exception('Email cannot be longer than 255 characters.');
+        } catch (IllegalArgumentException $e) {
+            throw new IllegalArgumentException($e->getMessage());
         }
 
         $this->email = $email;
@@ -98,42 +93,73 @@ class User extends Entity {
     }
 
     public function setPassword($password) {
-        if (!is_string($password)) {
-            throw new \Exception('Password must be a string.');
+        try {
+            Validator::password($password);
+        } catch (IllegalArgumentException $e) {
+            throw new IllegalArgumentException($e->getMessage());
         }
-
-        $password = trim($password);
-        $password = \Normalizer::normalize($password);
-
-        if (strlen($password) < 6) {
-            throw new \Exception('Password cannot be shorter than 6 characters.');
-        }
-        // TODO: add criteria!
 
         $this->passwordHash = Util::hashPassword($password);
     }
 
     public function isPasswordCorrect($password) {
         if (!is_string($password)) {
-            throw new \Exception('Password must be a string.');
+            throw new IllegalArgumentException('Password must be a string.');
         }
 
         return $this->passwordHash === Util::hashPassword($password);
     }
 
+    public function getPermissions() {
+        if (empty($this->permissionsCache)) {
+            $roleSpecificPermissions = array_map([$this, 'createPermissionsFromRole'], $this->getEffectiveRoles());
+            $defaultPermissions = [
+                new PublicPermissions,
+                // new UserPermissions($this)
+            ];
+
+            $permissionUnion = new PermissionsUnion(array_merge($roleSpecificPermissions, $defaultPermissions));
+            $this->permissionsCache = $permissionUnion;
+        }
+
+        return $this->permissionsCache;
+    }
+
+    private function createPermissionsFromRole($role) {
+        switch($role) {
+            case Roles::ROLE_ADMIN:
+                return new AdminPermissions;
+            case Roles::ROLE_DEMO:
+                return new DemoPermissions;
+            case Roles::ROLE_SAURON:
+                return new SauronPermissions;
+        }
+    }
+
+    public function expandRole($role) {
+        return array_merge([$role], Roles::getImpliedRoles($role));
+    }
+
+    public function getEffectiveRoles() {
+        $expandedRoles = array_map([$this, 'expandRole'], $this->getRoles());
+        return array_merge(...$expandedRoles);
+    }
+
+    // TODO: Doctrine Type array
     public function setRoles($roles) {
         if (!is_array($roles)) {
             throw new \Exception('Roles must be an array of roles as strings.');
         }
 
-        $invalidRoles = array_udiff($roles, self::ROLES, 'strcasecmp');
-        if (count($invalidRoles)) {
-            throw new \Exception('Invalid roles: ' . implode(', ', $invalidRoles) . 'Valid roles include ' . implode(', ', self::ROLES));
+        $invalidRoles = array_udiff($roles, Roles::getExistingRoles(), 'strcasecmp');
+        if (!empty($invalidRoles)) {
+            throw new \Exception('Invalid roles: ' . implode(', ', $invalidRoles) . 'Valid roles include ' . implode(', ', Roles::getExistingRoles()));
         }
 
         $this->roles = implode(',', $roles);
     }
 
+    // TODO: Doctrine Type array
     public function getRoles() {
         return explode(',', $this->roles);
     }

@@ -1,6 +1,8 @@
 <?php
-namespace App\Entity;
 
+namespace App\Model\Entities;
+
+use App\Exceptions\IllegalArgumentException;
 use App\Util\Validator;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,14 +31,14 @@ class Folder extends Entity {
     public function __construct($name, $creator) {
         $this->setName($name);
         $this->setCreator($creator);
-        $this->creationTimestamp = new \DateTime();
+        $this->creationTimestamp = new \DateTime;
     }
 
     public function setName($name) {
         try {
             Validator::name($name);
-        } catch (\Exception $e) {
-            throw new Exception($e->getMessage());
+        } catch (IllegalArgumentException $e) {
+            throw new IllegalArgumentException($e->getMessage());
         }
 
         $this->name = $name;

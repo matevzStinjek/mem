@@ -1,5 +1,6 @@
 <?php
-namespace App\Resource;
+
+namespace App\Resources;
 
 use App\Entity\User;
 use App\Helpers\FilteringHelper;
@@ -7,9 +8,9 @@ use Doctrine\ORM\QueryBuilder;
 
 class UserResource extends AbstractResource {
 
-    public function read($id) {
-        $user = $this->getEntity($id);
-        return $user ?: null;
+    public function read($request) {
+        $user = $this->getEntity($request->id);
+        return $user;
     }
 
     public function readAll($params) {
@@ -20,13 +21,13 @@ class UserResource extends AbstractResource {
     }
 
     public function create($entity) {
-        if (!isset($entity->name)) {
+        if (empty($entity->name)) {
             throw new \Exception('Name is required!');
         }
-        if (!isset($entity->email)) {
+        if (empty($entity->email)) {
             throw new \Exception('Email is required!');
         }
-        if (!isset($entity->password)) {
+        if (empty($entity->password)) {
             throw new \Exception('Password is required!');
         }
 

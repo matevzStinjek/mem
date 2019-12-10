@@ -1,20 +1,20 @@
+
 NEXT PHASE:
-* upgrade to slim 4
-* refactor dependencies to $app (extend SlimApp to my App :) )s
-* filter chain type auth
-* custom Request wrapper ($request = new Request(SlimRequest $slimRequest);) that adds user(auth), params, em
-* filter in routes (middleware)
+* middleware auth
 
 PHASE + 1:
-* usersgroups <> foldersMembership <> folder
+* split up Application, Application extends App
+* censor github settings history
 * blob <> assetcontroller <> foldercontent relationship
+* usersgroups <> foldersMembership <> folder
 * UserGroupController.php && Resource
 
 PHASE + 2:
 * rename UserGroup to UsersGroup and UserGroupMemberships to UsersGroupsMemberships
-* advanced permissions
-* rest of the fucking api
 * facebook login integration
-* dependencies --> Application.php
+* rest of the fucking api
 * fetch blobs of thumbnail/parameter size (?size=300x200) (aws lambda)
 * salt password and hash with sha256 not sha512
+* remove unneeded packages like doctrine/annotations
+* services to daemons
+* notification socket server

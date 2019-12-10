@@ -1,7 +1,8 @@
 <?php
-namespace App\Resource;
 
-use App\Entity\Folder;
+namespace App\Resources;
+
+use App\Entities\Folder;
 
 class FolderResource extends AbstractResource {
 
@@ -17,10 +18,10 @@ class FolderResource extends AbstractResource {
     }
 
     public function create($entity) {
-        if (!isset($entity->name)) {
+        if (empty($entity->name)) {
             throw new \Exception('Name is required!');
         }
-        if (!isset($entity->creatorId)) {
+        if (empty($entity->creatorId)) {
             throw new \Exception('CreatorId is required!');
         }
 

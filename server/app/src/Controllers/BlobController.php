@@ -10,8 +10,10 @@ final class BlobController extends AbstractController {
 
     private $s3;
 
-    public function __construct(AssetRepository $s3) {
-        $this->s3 = $s3;
+    public function __construct(ContainerInterface $container) {
+        $s3Client = $container->get('s3');
+        $bucket   = $container->get('config')->bucket;
+        $this->s3 = new AssetRepository($s3Client, $bucket);
     }
 
     protected function get(Request $request, Response $response, array $args) {
@@ -24,11 +26,11 @@ final class BlobController extends AbstractController {
         $blob = $this->decodeRequestBody($request)->blob;
         $blobHash = $this->s3->store($blob);
         return $response->write(($blobHash));
-    }    
+    }
 
     protected function delete(Request $request, Response $response, array $args) {
         $blobHash = $args['hash'];
         $this->s3->delete($blobHash);
         return $response;
-    }    
+    }
 }
