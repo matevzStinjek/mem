@@ -2,7 +2,7 @@
 
 namespace App\Filters;
 
-use App\Util\Util;
+use App\Model\Entities\UnregisteredUser;
 use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -26,10 +26,7 @@ class AuthFilter implements Filter {
     }
 
     private function getUser(Request $request) {
-
-        // return null;
         [$email, $password] = explode(':', base64_decode(explode(' ', $request->getHeader('Authorization')[0])[1]));
-        // $passwordHash = Util::hashPassword($password);
 
         $user = $this->em->createQueryBuilder()
             ->select('user')
@@ -37,6 +34,9 @@ class AuthFilter implements Filter {
             ->andWhere('user.email = :email')->setParameter('email', $email)
             ->getQuery()->getOneOrNullResult();
 
-        error_log(get_class($user));
+        if (!is_null($user) && $user->isPasswordCorrect($password)) {
+            return $user;
+        }
+        return new UnregisteredUser;
     }
 }

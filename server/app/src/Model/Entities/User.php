@@ -36,6 +36,11 @@ class User extends Entity {
     /**
      * @ORM\Column(type="string")
      */
+    private $salt;
+
+    /**
+     * @ORM\Column(type="string")
+     */
     private $roles;
 
     /**
@@ -99,7 +104,8 @@ class User extends Entity {
             throw new IllegalArgumentException($e->getMessage());
         }
 
-        $this->passwordHash = Util::hashPassword($password);
+        $this->salt = openssl_random_pseudo_bytes(16);
+        $this->passwordHash = Util::hashPassword($password, $this->salt);
     }
 
     public function isPasswordCorrect($password) {
@@ -107,7 +113,7 @@ class User extends Entity {
             throw new IllegalArgumentException('Password must be a string.');
         }
 
-        return $this->passwordHash === Util::hashPassword($password);
+        return $this->passwordHash === Util::hashPassword($password, $this->salt);
     }
 
     public function getPermissions() {
