@@ -5,11 +5,15 @@ namespace App\Model\Entities;
 use App\Exceptions\IllegalArgumentException;
 use App\Model\Permissions\Roles;
 use App\Model\Permissions\AdminPermissions;
+use App\Model\Permissions\WtPermissions;
 use App\Model\Permissions\DemoPermissions;
-use App\Model\Permissions\UserPermissions;
+use App\Model\Permissions\PublicPermissions;
+use App\Model\Permissions\PermissionsUnion;
 use App\Model\Permissions\SauronPermissions;
+use App\Model\Permissions\UserPermissions;
 use App\Util\Validator;
 use App\Util\Util;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -39,7 +43,7 @@ class User extends Entity {
     private $salt;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="set")
      */
     private $roles;
 
@@ -49,7 +53,7 @@ class User extends Entity {
      *     name="userGroupsMemberships",
      *     joinColumns={@ORM\JoinColumn(name="userId", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="userGroupId", referencedColumnName="id")}
-     *  )
+     * )
      */
     private $userGroups;
 
@@ -60,7 +64,7 @@ class User extends Entity {
 
     private $permissionsCache;
 
-    public function __construct($name, $email, $password, $roles) {
+    public function __construct($name, $email, $password) {
         $this->userGroups = new ArrayCollection;
 
         $this->setName($name);
@@ -120,25 +124,26 @@ class User extends Entity {
         if (empty($this->permissionsCache)) {
             $roleSpecificPermissions = array_map([$this, 'createPermissionsFromRole'], $this->getEffectiveRoles());
             $defaultPermissions = [
+                new UserPermissions($this),
                 new PublicPermissions,
-                // new UserPermissions($this)
             ];
+            error_log(var_dump(array_merge($roleSpecificPermissions, $defaultPermissions)));
 
-            $permissionUnion = new PermissionsUnion(array_merge($roleSpecificPermissions, $defaultPermissions));
-            $this->permissionsCache = $permissionUnion;
+            $permissionsUnion = new PermissionsUnion(array_merge($roleSpecificPermissions, $defaultPermissions));
+            $this->permissionsCache = '$permissionsUnion';
         }
 
         return $this->permissionsCache;
     }
 
     private function createPermissionsFromRole($role) {
-        switch($role) {
+        switch ($role) {
             case Roles::ROLE_ADMIN:
                 return new AdminPermissions;
-            case Roles::ROLE_DEMO:
-                return new DemoPermissions;
             case Roles::ROLE_SAURON:
                 return new SauronPermissions;
+            case Roles::ROLE_DEMO:
+                return new DemoPermissions;
         }
     }
 
@@ -146,28 +151,27 @@ class User extends Entity {
         return array_merge([$role], Roles::getImpliedRoles($role));
     }
 
-    public function getEffectiveRoles() {
+    private function getEffectiveRoles() {
         $expandedRoles = array_map([$this, 'expandRole'], $this->getRoles());
         return array_merge(...$expandedRoles);
     }
 
-    // TODO: Doctrine Type array
     public function setRoles($roles) {
         if (!is_array($roles)) {
             throw new \Exception('Roles must be an array of roles as strings.');
         }
 
-        $invalidRoles = array_udiff($roles, Roles::getExistingRoles(), 'strcasecmp');
+        $roles = array_map(function($role) { return strtoupper($role); }, $roles);
+        $invalidRoles = array_diff($roles, Roles::getExistingRoles());
         if (!empty($invalidRoles)) {
-            throw new \Exception('Invalid roles: ' . implode(', ', $invalidRoles) . 'Valid roles include ' . implode(', ', Roles::getExistingRoles()));
+            throw new \Exception('Invalid roles: ' . implode(', ', $invalidRoles) . '. Valid roles include ' . implode(', ', Roles::getExistingRoles()));
         }
 
-        $this->roles = implode(',', $roles);
+        $this->roles = $roles;
     }
 
-    // TODO: Doctrine Type array
     public function getRoles() {
-        return explode(',', $this->roles);
+        return $this->roles;
     }
 
     // TODO: remove when you confirm it's redundant

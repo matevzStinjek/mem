@@ -2,14 +2,16 @@
 
 namespace App\Resources;
 
-use App\Entity\User;
+use App\Model\Entities\User;
+use App\Http\Request;
 use App\Helpers\FilteringHelper;
 use Doctrine\ORM\QueryBuilder;
 
 class UserResource extends AbstractResource {
 
     public function read($request) {
-        $user = $this->getEntity($request->id);
+        $id = $request->args->id;
+        $user = $this->getEntity($id);
         return $user;
     }
 
@@ -20,7 +22,8 @@ class UserResource extends AbstractResource {
         return $users;
     }
 
-    public function create($entity) {
+    public function create(Request $request) {
+        $entity = $request->body;
         if (empty($entity->name)) {
             throw new \Exception('Name is required!');
         }
@@ -33,10 +36,15 @@ class UserResource extends AbstractResource {
 
         $user = new User($entity->name, $entity->email, $entity->password);
 
+        // cont w permissions
+        if (property_exists($entity, 'roles')) {
+            $user->setRoles($entity->roles);
+        }
+
         $this->em->persist($user);
         $this->em->flush();
 
-        return $user->getId();
+        return $user;
     }
 
     public function update($id, $entity) {
@@ -78,7 +86,7 @@ class UserResource extends AbstractResource {
     private function getEntity($id) {
         return $this->em->createQueryBuilder()
                         ->select('user')
-                        ->from('App\Entity\User', 'user')
+                        ->from('App\Model\Entities\User', 'user')
                         ->andWhere('user.id = :id')->setParameter('id', $id)
                         ->getQuery()->getOneOrNullResult();
 

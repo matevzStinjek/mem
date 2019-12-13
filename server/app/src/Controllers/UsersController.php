@@ -2,29 +2,30 @@
 
 namespace App\Controllers;
 
+// use App\Model\Entities\User;
 use App\Http\Request;
-use App\Resources\ExampleResource;
+use App\Resources\UserResource;
 use Psr\Container\ContainerInterface;
 use Slim\Psr7\Response;
 
-class ExampleController extends AbstractController {
+class UsersController extends AbstractController {
 
     private $resource;
 
     public function __construct(ContainerInterface $container) {
         parent::__construct($container);
-        $this->resource = new ExampleResource($this->em);
+        $this->resource = new UserResource($this->em);
     }
 
     protected function handleGet(Request $request, Response $response) {
-        $example = $this->resource->read();
-        $this->encodeResponseBody($response, '$example');
+        $this->encodeResponseBody($response, 'get users');
         return $response;
     }
 
     protected function handlePost(Request $request, Response $response) {
-        $id = $this->resource->create();
-        $this->encodeResponseBody($response, $id);
+        $user = $this->resource->create($request);
+        $ret = UserController::asJson($user);
+        $this->encodeResponseBody($response, $ret);
         return $response;
     }
 }

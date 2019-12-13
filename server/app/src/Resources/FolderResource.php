@@ -80,15 +80,11 @@ class FolderResource extends AbstractResource {
     }
 
     private function getEntity($id) {
+        // add permissions
         return $this->em->createQueryBuilder()
                         ->select('folder')
                         ->from('App\Entity\Folder', 'folder')
                         ->andWhere('folder.id = :id')->setParameter('id', $id)
                         ->getQuery()->getOneOrNullResult();
-
-        /** TODO: upgrade (example with permissions) */
-        // return $request->user->getPermissions()->getVisibleRegisteredUsersQueryBuilder($request->em)
-        //                   ->andWhere('registeredUser.id = :id')->setParameter('id', $this->id)
-        //                   ->getQuery()->getOneOrNullResult();
     }
 }

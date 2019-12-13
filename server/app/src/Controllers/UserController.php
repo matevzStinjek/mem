@@ -2,51 +2,40 @@
 
 namespace App\Controllers;
 
-use App\Entity\User;
+use App\Model\Entities\User;
 use App\Http\Request;
-use App\Resource\UserResource;
-use Slim\Http\Response;
+use App\Resources\UserResource;
+use Psr\Container\ContainerInterface;
+use Slim\Psr7\Response;
 
-final class UserController extends AbstractController {
+class UserController extends AbstractController {
 
-    private $userResource;
+    private $resource;
 
-    public function __construct(UserResource $userResource) {
-        $this->userResource = $userResource;
+    public function __construct(ContainerInterface $container) {
+        parent::__construct($container);
+        $this->resource = new UserResource($this->em);
     }
 
-    protected function get(Request $request, Response $response) {
-        // $user = $this->userResource->read($request->args);
-        // $json = self::asJson($user);
-        // return $response->withJson($json);
+    protected function handleGet(Request $request, Response $response) {
+        $user = $this->resource->read($request);
+        $ret = self::asJson($user);
+        $this->encodeResponseBody($response, $ret);
+
+
+        error_log(get_class($user->getPermissions()));
+
+
         return $response;
     }
 
-    protected function getAll(Request $request, Response $response) {
-        // $params = $request->getParams();
-        // $users = $this->userResource->readAll($params);
-        // $json = array_map(function($user) { return self::asJson($user); }, $users);
-        // return $response->withJson($json);
+    protected function handlePut(Request $request, Response $response) {
+        $this->encodeResponseBody($response, 'put user');
         return $response;
     }
 
-    protected function post(Request $request, Response $response) {
-        // $entity = $this->decodeRequestBody($request);
-        // $id = $this->userResource->create($entity);
-        // return $response->write($id);
-        return $response;
-    }
-
-    protected function put(Request $request, Response $response) {
-        // $entity = $this->decodeRequestBody($request);
-        // $id = $this->userResource->update($args['id'], $entity);
-        // return $response->write($id);
-        return $response;
-    }
-
-    protected function delete(Request $request, Response $response) {
-        // $id = $this->userResource->remove($args['id']);
-        // return $response->write($id);
+    protected function handleDelete(Request $request, Response $response) {
+        $this->encodeResponseBody($response, 'delete user');
         return $response;
     }
 

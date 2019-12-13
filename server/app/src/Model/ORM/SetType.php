@@ -15,7 +15,7 @@ class SetType extends Type {
     }
 
     public function getSqlDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
-        return "LONGBLOB";
+        return 'LONGBLOB';
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform) {
@@ -36,10 +36,10 @@ class SetType extends Type {
         }
 
         if (!is_array($value)) {
-            throw new InvalidArgumentException('Invalid  value: ' . gettype($value) . ' must be an array');
+            throw new InvalidArgumentException('Invalid value: ' . gettype($value) . ' must be an array');
         }
 
-        return '[' . implode(',', $value) . ']';
+        return implode(',', $value);
     }
 
 }

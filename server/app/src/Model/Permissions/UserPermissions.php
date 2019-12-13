@@ -2,7 +2,7 @@
 
 namespace App\Model\Permissions;
 
-use App\Model\Entites\User;
+use App\Model\Entities\User;
 
 class UserPermissions extends Permissions {
 

@@ -25,7 +25,7 @@ class ExampleEntity extends Entity {
     public function __construct() {
         $this->name = 'test';
 
-        $std =  new \stdClass;
+        $std = new \stdClass;
         $std->name = 'Home';
         $std->status = 1;
         $this->jsn = $std;
