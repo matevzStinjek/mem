@@ -12,13 +12,13 @@ class Router {
         ''                     => 'ExampleController',
         // ''                     => 'PlatformController',
 
-        // 'users'                 => 'UserController',
-        // 'users/{id}'            => 'UserController',
+        'users'                 => 'UsersController',
+        'users/{id}'            => 'UserController',
 
-        // 'folders'               => 'FolderController',
+        // 'folders'               => 'FoldersController',
         // 'folders/{id}'          => 'FolderController',
 
-        // 'blobs'                 => 'BlobController',
+        // 'blobs'                 => 'BlobsController',
         // 'blobs/{hash}'          => 'BlobController',
     ];
 

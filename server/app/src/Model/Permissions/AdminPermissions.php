@@ -7,4 +7,8 @@ class AdminPermissions extends Permissions {
     public function __toString() {
         return 'AdminPermissions';
     }
+
+    public function canTest() {
+        return true;
+    }
 }

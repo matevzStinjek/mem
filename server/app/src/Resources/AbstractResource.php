@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 
 abstract class AbstractResource {
 
-    protected $em = null;
+    protected $em ;
 
     public function __construct(EntityManager $em) {
         $this->em = $em;
@@ -19,6 +19,4 @@ abstract class AbstractResource {
     // shared sorting rules
 
     // shared filtering rules
-
-    // abstract getEntity
 }

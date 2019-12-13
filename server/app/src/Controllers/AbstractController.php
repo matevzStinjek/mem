@@ -6,7 +6,7 @@ use App\Http\Request;
 use App\Exceptions\InternalServerErrorException;
 use Psr\Container\ContainerInterface;
 use Slim\Psr7\Request as PsrRequest;
-use Slim\Psr7\Response as PsrResponse;
+use Slim\Psr7\Response;
 
 abstract class AbstractController {
 
@@ -18,14 +18,14 @@ abstract class AbstractController {
         $this->user = $container->get('user');
     }
 
-    public function __invoke(PsrRequest $request, PsrResponse $response, array $args) {
+    public function __invoke(PsrRequest $request, Response $response, array $args) {
         $handlerMethod = self::getHandlerMethod($request, $args);
         if (!method_exists($this, $handlerMethod)) {
             return $response->withStatus(405, 'Method does not exist on this endpoint.');
         }
 
         try {
-            $request = new Request($request, $args);
+            $request = new Request($request, $args, $this->user);
             return $this->$handlerMethod($request, $response);
         } catch (InternalServerErrorException $e) {
             error_log($e->getMessage());
@@ -33,8 +33,13 @@ abstract class AbstractController {
         }
     }
 
-    private static function getHandlerMethod($request, $args) {
+    private static function getHandlerMethod($request) {
         $method = $request->getMethod();
-        return $method === 'GET' && empty($args) ? 'getAll' : $method;
+        return "handle$method";
+    }
+
+    protected function encodeResponseBody(Response $response, $body) {
+        if (empty($body)) return;
+        $response->getBody()->write(json_encode($body));
     }
 }

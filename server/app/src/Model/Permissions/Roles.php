@@ -19,6 +19,6 @@ class Roles {
     }
 
     public static function getExistingRoles() {
-        return (new ReflectionClass(__CLASS__))->getConstants();
+        return (new \ReflectionClass(__CLASS__))->getConstants();
     }
 }

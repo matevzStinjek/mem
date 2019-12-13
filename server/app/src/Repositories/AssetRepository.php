@@ -27,7 +27,7 @@ class AssetRepository {
     }
 
     public function retrieve($key) {
-        $result =  $this->s3->getObject([
+        $result = $this->s3->getObject([
             'Bucket' => $this->bucket,
             'Key'    => $key,
         ]);

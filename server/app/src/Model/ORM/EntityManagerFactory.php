@@ -24,6 +24,6 @@ class EntityManagerFactory {
 
     private static function setCustomDoctrineDataTypes() {
         Type::overrideType('json', 'App\Model\ORM\JsonType');
-        Type::addType('set',  'App\Model\ORM\SetType');
+        Type::addType('set', 'App\Model\ORM\SetType');
     }
 }

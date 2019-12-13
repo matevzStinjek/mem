@@ -6,14 +6,16 @@ use Psr\Http\Message\ServerRequestInterface as PsrRequest;
 
 class Request {
 
-    public $body;
-    public $args;
-    public $params;
-    public $headers;
-    public $cookies;
+    private $user;
+    private $body;
+    private $args;
+    private $params;
+    private $headers;
+    private $cookies;
     
-    public function __construct(PsrRequest $request, $args) {
-        $this->body    = $request->getParsedBody();
+    public function __construct(PsrRequest $request, $args, $user) {
+        $this->user    = $user;
+        $this->body    = (object)$request->getParsedBody();
         $this->args    = (object)$args;
         $this->params  = $request->getQueryParams();
         $this->headers = $request->getHeaders();
@@ -21,23 +23,22 @@ class Request {
         /** getServerParams, getUploadedFiles */
     }
 
-    public function getBody() {
-        return $this->body;
-    }
-
-    public function getArgs() {
-        return $this->args;
-    }
-
-    public function getParams() {
-        return $this->params;
-    }
-
-    public function getHeaders() {
-        return $this->headers;
-    }
-
-    public function getCookies() {
-        return $this->cookies;
+    public function __get($name) {
+        switch ($name) {
+            case 'user':
+                return $this->user;
+            case 'body':
+                return $this->body;
+            case 'args':
+                return $this->args;
+            case 'params':
+                return $this->params;
+            case 'headers':
+                return $this->headers;
+            case 'cookies':
+                return $this->cookies;
+            default:
+                throw new \Exception("Propery $name is not available.");
+        }
     }
 }

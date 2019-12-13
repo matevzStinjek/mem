@@ -13,7 +13,7 @@ $code .= "
         email VARCHAR(255) COLLATE utf8_unicode_ci,
         passwordHash CHAR(64) COLLATE utf8_unicode_ci,
         salt CHAR(16) COLLATE utf8_unicode_ci,
-        roles set COLLATE utf8_unicode_ci,
+        roles longblob COLLATE utf8_unicode_ci,
         creationTimestamp DATETIME NOT NULL,
         PRIMARY KEY (id)
     );
@@ -84,3 +84,16 @@ $code .= "
 ";
 
 $code .= "INSERT INTO folderContent VALUES('199f25fd69940560d438a6d7d3ace16e3cb4eab9cf2ad6ff069ccdc0585bb8b3', 1, 1, NOW());";
+
+$code .= "
+    CREATE TABLE sessions (
+        id varchar(36) CHARACTER SET ascii NOT NULL,
+        userId char(8) CHARACTER SET ascii NOT NULL,
+        lastActivityTimestamp datetime DEFAULT NULL,
+        creationTimestamp datetime NOT NULL,
+        PRIMARY KEY (id),
+        KEY sessions_creationTimestamp_k (creationTimestamp),
+        KEY sessions_userId_k (userId),
+        CONSTRAINT sessions_userId_fk FOREIGN KEY (userId) REFERENCES users (id)
+    )
+";

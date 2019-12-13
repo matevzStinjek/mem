@@ -6,7 +6,7 @@ use App\Repositories\AssetRepository;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-final class BlobController extends AbstractController {
+class BlobController extends AbstractController {
 
     private $s3;
 
@@ -16,21 +16,24 @@ final class BlobController extends AbstractController {
         $this->s3 = new AssetRepository($s3Client, $bucket);
     }
 
-    protected function get(Request $request, Response $response, array $args) {
-        $blobHash = $args['hash'];
-        $blob = $this->s3->retrieve($blobHash);
-        return $response->write($blob);
+    protected function get(Request $request, Response $response) {
+        // $blobHash = $args['hash'];
+        // $blob = $this->s3->retrieve($blobHash);
+        // return $response->write($blob);
+        return $response;
     }
 
-    protected function post(Request $request, Response $response, array $args) {
-        $blob = $this->decodeRequestBody($request)->blob;
-        $blobHash = $this->s3->store($blob);
-        return $response->write(($blobHash));
+    protected function post(Request $request, Response $response) {
+        // $blob = $this->decodeRequestBody($request)->blob;
+        // $blobHash = $this->s3->store($blob);
+        // return $response->write(($blobHash));
+        return $response;
     }
 
-    protected function delete(Request $request, Response $response, array $args) {
-        $blobHash = $args['hash'];
-        $this->s3->delete($blobHash);
+    protected function delete(Request $request, Response $response) {
+        // $blobHash = $args['hash'];
+        // $id = $this->s3->delete($blobHash);
+        // write deleted id or sth
         return $response;
     }
 }
