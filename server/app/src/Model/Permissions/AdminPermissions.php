@@ -9,6 +9,6 @@ class AdminPermissions extends Permissions {
     }
 
     public function canTest() {
-        return true;
+        return false;
     }
 }

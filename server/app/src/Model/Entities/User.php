@@ -127,10 +127,9 @@ class User extends Entity {
                 new UserPermissions($this),
                 new PublicPermissions,
             ];
-            error_log(var_dump(array_merge($roleSpecificPermissions, $defaultPermissions)));
 
             $permissionsUnion = new PermissionsUnion(array_merge($roleSpecificPermissions, $defaultPermissions));
-            $this->permissionsCache = '$permissionsUnion';
+            $this->permissionsCache = $permissionsUnion;
         }
 
         return $this->permissionsCache;
@@ -153,7 +152,7 @@ class User extends Entity {
 
     private function getEffectiveRoles() {
         $expandedRoles = array_map([$this, 'expandRole'], $this->getRoles());
-        return array_merge(...$expandedRoles);
+        return array_unique(array_merge(...$expandedRoles));
     }
 
     public function setRoles($roles) {
