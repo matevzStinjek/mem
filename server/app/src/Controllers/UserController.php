@@ -23,7 +23,7 @@ class UserController extends AbstractController {
         $this->encodeResponseBody($response, $ret);
 
 
-        error_log(get_class($user->getPermissions()));
+        error_log(json_encode($user->getPermissions()->canTest()));
 
 
         return $response;

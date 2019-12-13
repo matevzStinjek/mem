@@ -12,7 +12,7 @@ class Request {
     private $params;
     private $headers;
     private $cookies;
-    
+
     public function __construct(PsrRequest $request, $args, $user) {
         $this->user    = $user;
         $this->body    = (object)$request->getParsedBody();

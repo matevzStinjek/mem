@@ -12,7 +12,7 @@ class JsonType extends Type {
     public function getName() {
         return self::TYPE_NAME;
     }
-    
+
     public function getSqlDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
         return 'LONGBLOB';
     }
