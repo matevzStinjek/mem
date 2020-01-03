@@ -6,11 +6,40 @@ use Psr\Http\Message\ServerRequestInterface as PsrRequest;
 
 class Request {
 
+    /**
+     * Request dispatcher
+     * @var User
+     */
     private $user;
+
+    /**
+     * Request body
+     * @var object
+     */
     private $body;
+
+    /**
+     * Request arguments
+     * @var object
+     */
     private $args;
+
+    /**
+     * Query parameters
+     * @var array
+     */
     private $params;
+
+    /**
+     * Request headers
+     * @var array
+     */
     private $headers;
+
+    /**
+     * Request cookies
+     * @var array
+     */
     private $cookies;
 
     public function __construct(PsrRequest $request, $args, $user) {

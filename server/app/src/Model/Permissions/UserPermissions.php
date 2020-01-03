@@ -11,8 +11,4 @@ class UserPermissions extends Permissions {
     public function __construct(User $user) {
         $this->user = $user;
     }
-
-    public function __toString() {
-        return 'UserPermissions';
-    }
 }

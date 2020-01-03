@@ -1,19 +1,18 @@
-
 NEXT PHASE:
-* user permissions
+* test user permissions
 * discriminator pattern doctrine (users)
 * server side cookie sessions
 * check s3 again, blobcontroller
-
-PHASE + 1:
-* censor github settings history
+* architecture foldermembership, usergroupmembership
 * blob <> assetcontroller <> foldercontent relationship
 * usersgroups <> foldersMembership <> folder
 * UserGroupController.php && Resource
+* FolderMembershipsController.php
 
-PHASE + 2:
+PHASE + 1:
+* censor github settings history
 * facebook login integration
-* rest of the fucking api
+* s3 stream video
 * fetch blobs of thumbnail/parameter size (?size=300x200) (aws lambda)
 * remove unneeded packages like doctrine/annotations
 * services to daemons

@@ -6,7 +6,7 @@ class Config {
 
     private $config;
 
-    const BASE_URL = 'http://localhost:801881';
+    const BASE_URL = 'http://localhost:8081';
 
     public function __construct($config) {
         $this->config = $config;
@@ -16,7 +16,7 @@ class Config {
         return $this->config['settings']['db']['secret'];
     }
 
-    public function getBucket() {
+    public function getBucketName() {
         return $this->config['settings']['aws']['s3']['meta']['bucket'];
     }
 
@@ -35,7 +35,7 @@ class Config {
             case 'secret':
                 return $this->getSecret();
             case 'bucket':
-                return $this->getBucket();
+                return $this->getBucketName();
             case 's3':
                 return $this->getS3Config();
             case 'doctrine':

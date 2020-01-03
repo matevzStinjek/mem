@@ -65,11 +65,10 @@ class User extends Entity {
     private $permissionsCache;
 
     public function __construct($name, $email, $password) {
-        $this->userGroups = new ArrayCollection;
-
         $this->setName($name);
         $this->setEmail($email);
         $this->setPassword($password);
+        $this->userGroups = new ArrayCollection;
         $this->creationTimestamp = new \DateTime;
     }
 
@@ -157,13 +156,13 @@ class User extends Entity {
 
     public function setRoles($roles) {
         if (!is_array($roles)) {
-            throw new \Exception('Roles must be an array of roles as strings.');
+            throw new IllegalArgumentException('Roles must be an array of roles as strings.');
         }
 
         $roles = array_map(function($role) { return strtoupper($role); }, $roles);
         $invalidRoles = array_diff($roles, Roles::getExistingRoles());
         if (!empty($invalidRoles)) {
-            throw new \Exception('Invalid roles: ' . implode(', ', $invalidRoles) . '. Valid roles include ' . implode(', ', Roles::getExistingRoles()));
+            throw new IllegalArgumentException('Invalid roles: ' . implode(', ', $invalidRoles) . '. Valid roles include ' . implode(', ', Roles::getExistingRoles()));
         }
 
         $this->roles = $roles;
@@ -176,7 +175,7 @@ class User extends Entity {
     // TODO: remove when you confirm it's redundant
     public function addUserGroups($userGroups) {
         if (!is_array($userGroups)) {
-            throw new \Exception('UserGroups must be an array of UserGroup entities.');
+            throw new IllegalArgumentException('UserGroups must be an array of UserGroup entities.');
         }
 
         $this->userGroups = new ArrayCollection(array_merge($this->userGroups->toArray(), $userGroups->toArray()));
