@@ -14,10 +14,6 @@ class PermissionsUnion extends Permissions {
         }
     }
 
-    public function __toString() {
-        return "PermissionsUnion(" . implode(', ', $this->permissions) . ")";
-    }
-
     protected function defaultPermission($functionName, array $args, $isReadOnly) {
         foreach ($this->permissions as $permission) {
             if (call_user_func_array([$permission, $functionName], $args))

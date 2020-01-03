@@ -9,15 +9,15 @@ use Doctrine\ORM\QueryBuilder;
 
 class UserResource extends AbstractResource {
 
-    public function read($request) {
+    public function read(Request $request) {
         $id = $request->args->id;
         $user = $this->getEntity($id);
         return $user;
     }
 
-    public function readAll($params) {
+    public function readAll(Request $request) {
         $qb = $this->em->createQueryBuilder()->select('user')->from('App\Entity\User', 'user');
-        $qb = FilteringHelper::applyRules($qb, $params, self::getFilteringRules());
+        $qb = FilteringHelper::applyRules($qb, $request->params, self::getFilteringRules());
         $users = $qb->getQuery()->getResult();
         return $users;
     }
@@ -36,8 +36,7 @@ class UserResource extends AbstractResource {
 
         $user = new User($entity->name, $entity->email, $entity->password);
 
-        // cont w permissions
-        if (property_exists($entity, 'roles')) {
+        if (property_exists($entity, 'roles') && $user->getPermissions()->canSetUserRoles()) {
             $user->setRoles($entity->roles);
         }
 
@@ -47,11 +46,13 @@ class UserResource extends AbstractResource {
         return $user;
     }
 
-    public function update($id, $entity) {
-        if (is_null($id)) {
+    public function update(Request $request) {
+        $id = $request->args->id;
+        if (empty($id)) {
             throw new \Exception('Id is required!');
         }
 
+        $entity = $request->body;
         $user = $this->getEntity($id);
 
         if (isset($entity->name)) {
@@ -70,8 +71,9 @@ class UserResource extends AbstractResource {
         return $user->getId();
     }
 
-    public function remove($id) {
-        if (is_null($id)) {
+    public function remove(Request $request) {
+        $id = $request->args->id;
+        if (empty($id)) {
             throw new \Exception('Id is required!');
         }
 
@@ -84,11 +86,12 @@ class UserResource extends AbstractResource {
     }
 
     private function getEntity($id) {
-        return $this->em->createQueryBuilder()
-                        ->select('user')
-                        ->from('App\Model\Entities\User', 'user')
-                        ->andWhere('user.id = :id')->setParameter('id', $id)
-                        ->getQuery()->getOneOrNullResult();
+        return $this->em
+            ->createQueryBuilder()
+            ->select('user')
+            ->from('App\Model\Entities\User', 'user')
+            ->andWhere('user.id = :id')->setParameter('id', $id)
+            ->getQuery()->getOneOrNullResult();
 
         /** TODO: upgrade (example with permissions) */
         // return $request->user->getPermissions()->getVisibleRegisteredUsersQueryBuilder($request->em)

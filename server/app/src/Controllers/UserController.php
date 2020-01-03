@@ -21,11 +21,6 @@ class UserController extends AbstractController {
         $user = $this->resource->read($request);
         $ret = self::asJson($user);
         $this->encodeResponseBody($response, $ret);
-
-
-        error_log(json_encode($user->getPermissions()->canTest()));
-
-
         return $response;
     }
 

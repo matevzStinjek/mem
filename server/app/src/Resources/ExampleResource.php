@@ -8,7 +8,7 @@ class ExampleResource extends AbstractResource {
 
     public function read() {
         $example = $this->getEntity();
-        return $example ?: null;
+        return $example;
     }
 
     public function create() {
@@ -21,9 +21,10 @@ class ExampleResource extends AbstractResource {
     }
 
     private function getEntity() {
-        return $this->em->createQueryBuilder()
-                        ->select('exampleEntity')
-                        ->from('App\Model\Entities\ExampleEntity', 'exampleEntity')
-                        ->getQuery()->getOneOrNullResult();
+        return $this->em
+            ->createQueryBuilder()
+            ->select('exampleEntity')
+            ->from('App\Model\Entities\ExampleEntity', 'exampleEntity')
+            ->getQuery()->getOneOrNullResult();
     }
 }

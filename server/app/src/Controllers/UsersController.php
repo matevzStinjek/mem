@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-// use App\Model\Entities\User;
+use App\Exceptions\UserException;
 use App\Http\Request;
 use App\Resources\UserResource;
 use Psr\Container\ContainerInterface;
@@ -23,6 +23,9 @@ class UsersController extends AbstractController {
     }
 
     protected function handlePost(Request $request, Response $response) {
+        if (!$request->user->getPermissions()->canCreateNewUser())
+            throw new UserException('You do not have the required permissions to create a new user.');
+
         $user = $this->resource->create($request);
         $ret = UserController::asJson($user);
         $this->encodeResponseBody($response, $ret);
