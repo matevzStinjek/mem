@@ -4,8 +4,6 @@ namespace App\Model\Permissions;
 
 abstract class Permissions {
 
-    abstract public function __toString();
-
     public function canCreateNewUser() { return $this->defaultPermission(__FUNCTION__, func_get_args(), true); }
 
     protected function defaultPermission($functionName, array $args, $readOnly) {

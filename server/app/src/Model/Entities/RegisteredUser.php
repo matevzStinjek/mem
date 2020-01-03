@@ -45,7 +45,7 @@ class RegisteredUser extends Entity implements User {
     /**
      * @ORM\Column(type="set")
      */
-    private $roles;
+    private $roles = [];
 
     /**
      * @ORM\ManyToMany(targetEntity="UserGroup", inversedBy="users")
@@ -150,6 +150,7 @@ class RegisteredUser extends Entity implements User {
     }
 
     private function getEffectiveRoles() {
+        error_log(gettype($this->getRoles()));
         $expandedRoles = array_map([$this, 'expandRole'], $this->getRoles());
         return array_unique(array_merge(...$expandedRoles));
     }

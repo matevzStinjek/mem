@@ -21,8 +21,7 @@ class ExampleResource extends AbstractResource {
     }
 
     private function getEntity() {
-        return $this->em
-            ->createQueryBuilder()
+        return $this->em->createQueryBuilder()
             ->select('exampleEntity')
             ->from('App\Model\Entities\ExampleEntity', 'exampleEntity')
             ->getQuery()->getOneOrNullResult();

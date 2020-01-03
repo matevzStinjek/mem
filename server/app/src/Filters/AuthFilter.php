@@ -3,6 +3,7 @@
 namespace App\Filters;
 
 use App\Model\Entities\UnregisteredUser;
+use App\Exceptions\UserException;
 use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -34,9 +35,13 @@ class AuthFilter implements Filter {
             ->andWhere('registeredUser.email = :email')->setParameter('email', $email)
             ->getQuery()->getOneOrNullResult();
 
-        if (!is_null($user) && $user->isPasswordCorrect($password)) {
+        if (!is_null($user)) {
+            if (!$user->isPasswordCorrect($password))
+                throw new UserException('Invalid password');
+
             return $user;
         }
+
         return new UnregisteredUser;
     }
 }

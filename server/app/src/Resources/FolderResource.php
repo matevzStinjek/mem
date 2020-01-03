@@ -2,7 +2,7 @@
 
 namespace App\Resources;
 
-use App\Entities\Folder;
+use App\Model\Entities\Folder;
 
 class FolderResource extends AbstractResource {
 
@@ -25,7 +25,7 @@ class FolderResource extends AbstractResource {
             throw new \Exception('CreatorId is required!');
         }
 
-        $creator = $this->em->createQueryBuilder()->select('registeredUser')->from('App\Entity\RegisteredUser', 'registeredUser')
+        $creator = $this->em->createQueryBuilder()->select('registeredUser')->from('App\Model\Entities\RegisteredUser', 'registeredUser')
                             ->andWhere('registeredUser.id = :id')->setParameter('id', $entity->creatorId)
                             ->getQuery()->getOneOrNullResult();
         if (is_null($creator)) {
@@ -51,7 +51,7 @@ class FolderResource extends AbstractResource {
             $folder->setName($entity->name);
         }
         if (isset($entity->creatorId)) {
-            $creator = $this->em->createQueryBuilder()->select('registeredUser')->from('App\Entity\RegisteredUser', 'registeredUser')
+            $creator = $this->em->createQueryBuilder()->select('registeredUser')->from('App\Model\Entities\RegisteredUser', 'registeredUser')
                                 ->andWhere('registeredUser.id = :id')->setParameter('id', $entity->creatorId)
                                 ->getQuery()->getOneOrNullResult();
             if (is_null($creator)) {
@@ -82,9 +82,9 @@ class FolderResource extends AbstractResource {
     private function getEntity($id) {
         // add permissions
         return $this->em->createQueryBuilder()
-                        ->select('folder')
-                        ->from('App\Entity\Folder', 'folder')
-                        ->andWhere('folder.id = :id')->setParameter('id', $id)
-                        ->getQuery()->getOneOrNullResult();
+            ->select('folder')
+            ->from('App\Model\Entities\Folder', 'folder')
+            ->andWhere('folder.id = :id')->setParameter('id', $id)
+            ->getQuery()->getOneOrNullResult();
     }
 }

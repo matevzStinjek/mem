@@ -2,6 +2,8 @@
 
 namespace App\Model\Entities;
 
+use App\Model\Permissions\PublicPermissions;
+
 class UnregisteredUser implements User {
 
     private $permissionsCache;
