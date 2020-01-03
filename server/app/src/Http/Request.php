@@ -8,7 +8,7 @@ class Request {
 
     /**
      * Request dispatcher
-     * @var User
+     * @var RegisteredUser
      */
     private $user;
 

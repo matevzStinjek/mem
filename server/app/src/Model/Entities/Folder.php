@@ -18,7 +18,7 @@ class Folder extends Entity {
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="RegisteredUser")
      * @ORM\JoinColumn(name="creatorId")
      */
     private $creator;

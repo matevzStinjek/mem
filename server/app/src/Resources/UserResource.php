@@ -2,7 +2,7 @@
 
 namespace App\Resources;
 
-use App\Model\Entities\User;
+use App\Model\Entities\RegisteredUser;
 use App\Http\Request;
 use App\Helpers\FilteringHelper;
 use Doctrine\ORM\QueryBuilder;
@@ -16,7 +16,7 @@ class UserResource extends AbstractResource {
     }
 
     public function readAll(Request $request) {
-        $qb = $this->em->createQueryBuilder()->select('user')->from('App\Entity\User', 'user');
+        $qb = $this->em->createQueryBuilder()->select('registeredUser')->from('App\Entity\RegisteredUser', 'registeredUser');
         $qb = FilteringHelper::applyRules($qb, $request->params, self::getFilteringRules());
         $users = $qb->getQuery()->getResult();
         return $users;
@@ -34,7 +34,7 @@ class UserResource extends AbstractResource {
             throw new \Exception('Password is required!');
         }
 
-        $user = new User($entity->name, $entity->email, $entity->password);
+        $user = new RegisteredUser($entity->name, $entity->email, $entity->password);
 
         if (property_exists($entity, 'roles') && $user->getPermissions()->canSetUserRoles()) {
             $user->setRoles($entity->roles);
@@ -88,9 +88,9 @@ class UserResource extends AbstractResource {
     private function getEntity($id) {
         return $this->em
             ->createQueryBuilder()
-            ->select('user')
-            ->from('App\Model\Entities\User', 'user')
-            ->andWhere('user.id = :id')->setParameter('id', $id)
+            ->select('registeredUser')
+            ->from('App\Model\Entities\RegisteredUser', 'registeredUser')
+            ->andWhere('registeredUser.id = :id')->setParameter('id', $id)
             ->getQuery()->getOneOrNullResult();
 
         /** TODO: upgrade (example with permissions) */
@@ -103,7 +103,7 @@ class UserResource extends AbstractResource {
         $rules = [
             'roles' => function(QueryBuilder $qb, $filterValue) {
                 $roles = explode(',', $filterValue);
-                return $qb->andWhere($qb->expr()->in('user.roles', $roles));
+                return $qb->andWhere($qb->expr()->in('registeredUser.roles', $roles));
             },
         ];
 

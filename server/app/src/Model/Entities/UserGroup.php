@@ -18,7 +18,7 @@ class UserGroup extends Entity {
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="userGroups")
+     * @ORM\ManyToMany(targetEntity="RegisteredUser", mappedBy="userGroups")
      */
     private $users;
 
@@ -51,7 +51,7 @@ class UserGroup extends Entity {
 
     public function addUsers($users) {
         if (!is_array($users)) {
-            throw new IllegalArgumentException('Users must be an array of User entities.');
+            throw new IllegalArgumentException('Users must be an array of RegisteredUser entities.');
         }
 
         $this->users = new ArrayCollection(array_merge($this->users->toArray(), $users->toArray()));
