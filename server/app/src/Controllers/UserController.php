@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Model\Entities\User;
+use App\Model\Entities\RegisteredUser;
 use App\Http\Request;
 use App\Resources\UserResource;
 use Psr\Container\ContainerInterface;
@@ -34,7 +34,7 @@ class UserController extends AbstractController {
         return $response;
     }
 
-    public static function asJson(User $user) {
+    public static function asJson(RegisteredUser $user) {
         $resourceMap = [];
 
         $resourceMap += [

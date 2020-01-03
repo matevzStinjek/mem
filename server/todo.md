@@ -18,3 +18,4 @@ PHASE + 1:
 * services to daemons
 * notification socket server
 * create phantom accounts with 3rd party ids, schema: id email facebookId googleId isClaimed
+* captcha for registering

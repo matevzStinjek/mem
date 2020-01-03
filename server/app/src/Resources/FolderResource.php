@@ -25,8 +25,8 @@ class FolderResource extends AbstractResource {
             throw new \Exception('CreatorId is required!');
         }
 
-        $creator = $this->em->createQueryBuilder()->select('user')->from('App\Entity\User', 'user')
-                            ->andWhere('user.id = :id')->setParameter('id', $entity->creatorId)
+        $creator = $this->em->createQueryBuilder()->select('registeredUser')->from('App\Entity\RegisteredUser', 'registeredUser')
+                            ->andWhere('registeredUser.id = :id')->setParameter('id', $entity->creatorId)
                             ->getQuery()->getOneOrNullResult();
         if (is_null($creator)) {
             throw new \Exception('User with creatorId does not exist!');
@@ -51,8 +51,8 @@ class FolderResource extends AbstractResource {
             $folder->setName($entity->name);
         }
         if (isset($entity->creatorId)) {
-            $creator = $this->em->createQueryBuilder()->select('user')->from('App\Entity\User', 'user')
-                                ->andWhere('user.id = :id')->setParameter('id', $entity->creatorId)
+            $creator = $this->em->createQueryBuilder()->select('registeredUser')->from('App\Entity\RegisteredUser', 'registeredUser')
+                                ->andWhere('registeredUser.id = :id')->setParameter('id', $entity->creatorId)
                                 ->getQuery()->getOneOrNullResult();
             if (is_null($creator)) {
                 throw new \Exception('User with creatorId does not exist!');

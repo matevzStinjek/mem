@@ -29,9 +29,9 @@ class AuthFilter implements Filter {
         [$email, $password] = explode(':', base64_decode(explode(' ', $request->getHeader('Authorization')[0])[1]));
 
         $user = $this->em->createQueryBuilder()
-            ->select('user')
-            ->from('App\Model\Entities\User', 'user')
-            ->andWhere('user.email = :email')->setParameter('email', $email)
+            ->select('registeredUser')
+            ->from('App\Model\Entities\RegisteredUser', 'registeredUser')
+            ->andWhere('registeredUser.email = :email')->setParameter('email', $email)
             ->getQuery()->getOneOrNullResult();
 
         if (!is_null($user) && $user->isPasswordCorrect($password)) {
