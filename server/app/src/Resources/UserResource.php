@@ -5,6 +5,7 @@ namespace App\Resources;
 use App\Model\Entities\RegisteredUser;
 use App\Http\Request;
 use App\Helpers\FilteringHelper;
+use App\Exceptions\IllegalArgumentException;
 use Doctrine\ORM\QueryBuilder;
 
 class UserResource extends AbstractResource {
@@ -16,7 +17,7 @@ class UserResource extends AbstractResource {
     }
 
     public function readAll(Request $request) {
-        $qb = $this->em->createQueryBuilder()->select('registeredUser')->from('App\Entity\RegisteredUser', 'registeredUser');
+        $qb = $this->em->createQueryBuilder()->select('registeredUser')->from('App\Model\Entities\RegisteredUser', 'registeredUser');
         $qb = FilteringHelper::applyRules($qb, $request->params, self::getFilteringRules());
         $users = $qb->getQuery()->getResult();
         return $users;
@@ -25,18 +26,18 @@ class UserResource extends AbstractResource {
     public function create(Request $request) {
         $entity = $request->body;
         if (empty($entity->name)) {
-            throw new \Exception('Name is required!');
+            throw new IllegalArgumentException('Name is required!');
         }
         if (empty($entity->email)) {
-            throw new \Exception('Email is required!');
+            throw new IllegalArgumentException('Email is required!');
         }
         if (empty($entity->password)) {
-            throw new \Exception('Password is required!');
+            throw new IllegalArgumentException('Password is required!');
         }
 
         $user = new RegisteredUser($entity->name, $entity->email, $entity->password);
 
-        if (property_exists($entity, 'roles') && $user->getPermissions()->canSetUserRoles()) {
+        if (property_exists($entity, 'roles')) {
             $user->setRoles($entity->roles);
         }
 
@@ -49,7 +50,7 @@ class UserResource extends AbstractResource {
     public function update(Request $request) {
         $id = $request->args->id;
         if (empty($id)) {
-            throw new \Exception('Id is required!');
+            throw new IllegalArgumentException('Id is required!');
         }
 
         $entity = $request->body;
@@ -74,7 +75,7 @@ class UserResource extends AbstractResource {
     public function remove(Request $request) {
         $id = $request->args->id;
         if (empty($id)) {
-            throw new \Exception('Id is required!');
+            throw new IllegalArgumentException('Id is required!');
         }
 
         $user = $this->getEntity($id);
@@ -86,8 +87,7 @@ class UserResource extends AbstractResource {
     }
 
     private function getEntity($id) {
-        return $this->em
-            ->createQueryBuilder()
+        return $this->em->createQueryBuilder()
             ->select('registeredUser')
             ->from('App\Model\Entities\RegisteredUser', 'registeredUser')
             ->andWhere('registeredUser.id = :id')->setParameter('id', $id)
