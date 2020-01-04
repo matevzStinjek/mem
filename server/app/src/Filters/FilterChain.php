@@ -11,7 +11,7 @@ class FilterChain {
 
         $filters = [
             new CorsFilter($container),
-            // new SessionFilter($container),
+            new SessionFilter($container),
             new AuthFilter($container),
             new RequestBodyParserFilter($container)
         ];

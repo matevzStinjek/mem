@@ -4,9 +4,9 @@ namespace App\Model\Permissions;
 
 use App\Model\Entities\RegisteredUser;
 
-class UserPermissions extends Permissions {
+class RegisteredUserPermissions extends Permissions {
 
-    private $user;
+    protected $user;
 
     public function __construct(RegisteredUser $user) {
         $this->user = $user;

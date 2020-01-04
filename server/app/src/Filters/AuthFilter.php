@@ -35,7 +35,7 @@ class AuthFilter implements Filter {
             ->andWhere('registeredUser.email = :email')->setParameter('email', $email)
             ->getQuery()->getOneOrNullResult();
 
-        if (!is_null($user)) {
+        if (isset($user)) {
             if (!$user->isPasswordCorrect($password))
                 throw new UserException('Invalid password');
 
