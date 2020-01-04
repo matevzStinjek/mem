@@ -10,7 +10,7 @@ use App\Model\Permissions\DemoPermissions;
 use App\Model\Permissions\PublicPermissions;
 use App\Model\Permissions\PermissionsUnion;
 use App\Model\Permissions\SauronPermissions;
-use App\Model\Permissions\UserPermissions;
+use App\Model\Permissions\RegisteredUserPermissions;
 use App\Util\Validator;
 use App\Util\Util;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -123,7 +123,7 @@ class RegisteredUser extends Entity implements User {
         if (empty($this->permissionsCache)) {
             $roleSpecificPermissions = array_map([$this, 'createPermissionsFromRole'], $this->getEffectiveRoles());
             $defaultPermissions = [
-                new UserPermissions($this),
+                new RegisteredUserPermissions($this),
                 new PublicPermissions,
             ];
 
