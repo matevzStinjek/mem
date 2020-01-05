@@ -3,6 +3,7 @@
 namespace App\Model\Entities;
 
 use App\Model\Permissions\PublicPermissions;
+use App\Model\User;
 
 class UnregisteredUser implements User {
 

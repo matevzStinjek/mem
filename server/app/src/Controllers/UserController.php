@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Model\Entities\RegisteredUser;
 use App\Http\Request;
-use App\Resources\UserResource;
+use App\Resources\RegisteredUserResource;
 use Psr\Container\ContainerInterface;
 use Slim\Psr7\Response;
 
@@ -14,7 +14,7 @@ class UserController extends AbstractController {
 
     public function __construct(ContainerInterface $container) {
         parent::__construct($container);
-        $this->resource = new UserResource($this->em);
+        $this->resource = new RegisteredUserResource($this->em);
     }
 
     protected function handleGet(Request $request, Response $response) {

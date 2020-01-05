@@ -1,6 +1,7 @@
 NEXT PHASE:
-* server side cookie sessions
+* filtering, sorting, pagination
 * visible query builder
+* server side cookie sessions
 * check s3 again, blobcontroller
 * architecture foldermembership, usergroupmembership
 * blob <> assetcontroller <> foldercontent relationship

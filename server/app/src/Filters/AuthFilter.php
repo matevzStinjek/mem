@@ -29,19 +29,23 @@ class AuthFilter implements Filter {
     private function getUser(Request $request) {
         [$email, $password] = explode(':', base64_decode(explode(' ', $request->getHeader('Authorization')[0])[1]));
 
+        if (!$email) {
+            return new UnregisteredUser;
+        }
+
         $user = $this->em->createQueryBuilder()
             ->select('registeredUser')
             ->from('App\Model\Entities\RegisteredUser', 'registeredUser')
             ->andWhere('registeredUser.email = :email')->setParameter('email', $email)
             ->getQuery()->getOneOrNullResult();
 
-        if (isset($user)) {
-            if (!$user->isPasswordCorrect($password))
-                throw new UserException('Invalid password');
-
-            return $user;
+        if (is_null($user)) {
+            throw new UserException("User with email '$email' not found");
+        }
+        if (!$user->isPasswordCorrect($password)) {
+            throw new UserException("Invalid password for $email");
         }
 
-        return new UnregisteredUser;
+        return $user;
     }
 }
