@@ -3,9 +3,9 @@
 namespace App\Model\Entities;
 
 use App\Exceptions\IllegalArgumentException;
+use App\Model\User;
 use App\Model\Permissions\Roles;
 use App\Model\Permissions\AdminPermissions;
-use App\Model\Permissions\WtPermissions;
 use App\Model\Permissions\DemoPermissions;
 use App\Model\Permissions\PublicPermissions;
 use App\Model\Permissions\PermissionsUnion;
@@ -150,7 +150,6 @@ class RegisteredUser extends Entity implements User {
     }
 
     private function getEffectiveRoles() {
-        error_log(gettype($this->getRoles()));
         $expandedRoles = array_map([$this, 'expandRole'], $this->getRoles());
         return array_unique(array_merge(...$expandedRoles));
     }

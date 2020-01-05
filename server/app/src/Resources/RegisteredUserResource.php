@@ -2,24 +2,27 @@
 
 namespace App\Resources;
 
-use App\Model\Entities\RegisteredUser;
-use App\Http\Request;
-use App\Helpers\FilteringHelper;
 use App\Exceptions\IllegalArgumentException;
+use App\Helpers\FilteringHelper;
+use App\Helpers\PaginationHelper;
+use App\Helpers\SortingHelper;
+use App\Http\Request;
+use App\Model\Entities\RegisteredUser;
 use Doctrine\ORM\QueryBuilder;
 
-class UserResource extends AbstractResource {
+class RegisteredUserResource extends AbstractResource {
 
     public function read(Request $request) {
-        $id = $request->args->id;
-        $user = $this->getEntity($id);
+        $user = $this->getEntity($request);
         return $user;
     }
 
     public function readAll(Request $request) {
-        $qb = $this->em->createQueryBuilder()->select('registeredUser')->from('App\Model\Entities\RegisteredUser', 'registeredUser');
-        $qb = FilteringHelper::applyRules($qb, $request->params, self::getFilteringRules());
-        $users = $qb->getQuery()->getResult();
+        $qb = $request->user->getPermissions()->getSearchableRegisteredUsersQueryBuilder($this->em);
+        $qb = FilteringHelper::filterByRules($qb, $request->params, self::getFilteringRules());
+        $qb = SortingHelper::orderByRules($qb, $request->params, self::getSortingRules());
+
+        $users = PaginationHelper::returnPage($qb, $request);
         return $users;
     }
 
@@ -48,13 +51,8 @@ class UserResource extends AbstractResource {
     }
 
     public function update(Request $request) {
-        $id = $request->args->id;
-        if (empty($id)) {
-            throw new IllegalArgumentException('Id is required!');
-        }
-
         $entity = $request->body;
-        $user = $this->getEntity($id);
+        $user = $this->getEntity($request);
 
         if (isset($entity->name)) {
             $user->setName($entity->name);
@@ -73,38 +71,38 @@ class UserResource extends AbstractResource {
     }
 
     public function remove(Request $request) {
-        $id = $request->args->id;
-        if (empty($id)) {
-            throw new IllegalArgumentException('Id is required!');
-        }
-
-        $user = $this->getEntity($id);
+        $user = $this->getEntity($request);
 
         $this->em->remove($user);
         $this->em->flush();
 
-        return $id;
+        return $user->getId();
     }
 
-    private function getEntity($id) {
-        return $this->em->createQueryBuilder()
-            ->select('registeredUser')
-            ->from('App\Model\Entities\RegisteredUser', 'registeredUser')
+    private function getEntity(Request $request) {
+        $id = $request->args->id;
+
+        return $request->user->getPermissions()->getVisibleUsersQueryBuilder($this->em)
             ->andWhere('registeredUser.id = :id')->setParameter('id', $id)
             ->getQuery()->getOneOrNullResult();
-
-        /** TODO: upgrade (example with permissions) */
-        // return $request->user->getPermissions()->getVisibleRegisteredUsersQueryBuilder($request->em)
-        //                   ->andWhere('registeredUser.id = :id')->setParameter('id', $this->id)
-        //                   ->getQuery()->getOneOrNullResult();
     }
 
-    private function getFilteringRules() {
+    private static function getFilteringRules() {
         $rules = [
             'roles' => function(QueryBuilder $qb, $filterValue) {
                 $roles = explode(',', $filterValue);
                 return $qb->andWhere($qb->expr()->in('registeredUser.roles', $roles));
             },
+        ];
+
+        return $rules;
+    }
+
+    private static function getSortingRules() {
+        $rules = [
+            'creationTimestamp' => function($qb, $direction) {
+                return $qb->addOrderBy('registeredUser.creationTimestamp', $direction);
+            }
         ];
 
         return $rules;
