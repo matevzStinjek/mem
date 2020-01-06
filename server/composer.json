@@ -15,15 +15,15 @@
         }
     },
     "require": {
-        "aws/aws-sdk-php": "^3.109",
-        "doctrine/annotations": "^1.7",
-        "doctrine/cache": "^1.8",
+        "aws/aws-sdk-php": "^3.130",
+        "doctrine/annotations": "^1.8",
+        "doctrine/cache": "^1.10",
         "doctrine/collections": "^1.6",
-        "doctrine/orm": "^2.6",
+        "doctrine/orm": "^2.7",
         "facebook/graph-sdk": "^5.7",
         "php-di/php-di": "^6.0",
         "slim/psr7": "^0.5.0",
-        "slim/slim": "^4.3.0",
-        "vlucas/phpdotenv": "^3.4"
+        "slim/slim": "^4.4.0",
+        "vlucas/phpdotenv": "^3.6"
     }
 }
