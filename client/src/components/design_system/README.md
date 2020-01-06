@@ -1,1 +1,0 @@
-Celtra's design system
