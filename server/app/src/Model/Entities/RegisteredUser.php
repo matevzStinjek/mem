@@ -159,7 +159,7 @@ class RegisteredUser extends Entity implements User {
             throw new IllegalArgumentException('Roles must be an array of roles as strings.');
         }
 
-        $roles = array_map(function($role) { return strtoupper($role); }, $roles);
+        $roles = array_map(fn($role) => strtoupper($role), $roles);
         $invalidRoles = array_diff($roles, Roles::getExistingRoles());
         if (!empty($invalidRoles)) {
             throw new IllegalArgumentException('Invalid roles: ' . implode(', ', $invalidRoles) . '. Valid roles include ' . implode(', ', Roles::getExistingRoles()));
