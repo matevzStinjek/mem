@@ -23,6 +23,7 @@ class UserResource extends AbstractResource {
         $qb = FilteringHelper::filterByRules($qb, $request->params, self::getFilteringRules());
         $qb = SortingHelper::orderByRules($qb, $request->params, self::getSortingRules());
 
+        // $users = $qb->getQuery()->getResult();
         $users = PaginationHelper::returnPage($qb, $request);
         return $users;
     }
@@ -70,7 +71,7 @@ class UserResource extends AbstractResource {
         $this->em->persist($user);
         $this->em->flush();
 
-        return $user->getId();
+        return $user;
     }
 
     public function remove(Request $request) {
@@ -79,13 +80,13 @@ class UserResource extends AbstractResource {
         $this->em->remove($user);
         $this->em->flush();
 
-        return $user->getId();
+        return $user;
     }
 
     private function getEntity(Request $request) {
         $id = $request->args->id;
 
-        return $request->user->getPermissions()->getVisibleUsersQueryBuilder($this->em)
+        return $request->user->getPermissions()->getVisibleRegisteredUsersQueryBuilder($this->em)
             ->andWhere('registeredUser.id = :id')->setParameter('id', $id)
             ->getQuery()->getOneOrNullResult();
     }
@@ -94,7 +95,13 @@ class UserResource extends AbstractResource {
         $rules = [
             'roles' => function(QueryBuilder $qb, $filterValue) {
                 $roles = explode(',', $filterValue);
-                return $qb->andWhere($qb->expr()->in('registeredUser.roles', $roles));
+                foreach ($roles as $index => $role) {
+                    $orX[] = "registeredUser.roles LIKE :val$index";
+                    $qb->setParameter("val$index", "%$role%");
+                }
+                // TODO: fix, not working, not sure why
+                $qb->andWhere(call_user_func_array([$qb->expr(), 'orX'], $orX));
+                return $qb;
             },
         ];
 
@@ -105,7 +112,10 @@ class UserResource extends AbstractResource {
         $rules = [
             'creationTimestamp' => function($qb, $direction) {
                 return $qb->addOrderBy('registeredUser.creationTimestamp', $direction);
-            }
+            },
+            'name' => function($qb, $direction) {
+                return $qb->addOrderBy('registeredUser.name', $direction);
+            },
         ];
 
         return $rules;
