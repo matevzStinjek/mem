@@ -1,6 +1,4 @@
 NEXT PHASE:
-* filtering, sorting, pagination
-* visible query builder
 * server side cookie sessions
 * check s3 again, blobcontroller
 * architecture foldermembership, usergroupmembership
@@ -9,6 +7,7 @@ NEXT PHASE:
 * UserGroupController.php && Resource
 * facebook login integration
 * FolderMembershipsController.php
+* limit User(s)Controller api with permissions
 
 PHASE + 1:
 * censor github settings history
