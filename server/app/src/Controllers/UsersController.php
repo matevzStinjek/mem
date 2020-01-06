@@ -18,7 +18,14 @@ class UsersController extends AbstractController {
     }
 
     protected function handleGet(Request $request, Response $response) {
-        $this->encodeResponseBody($response, 'get users');
+        $users = $this->resource->readAll($request);
+
+        $usersAsJson = [];
+        foreach ($users as $user) {
+            $usersAsJson[] = UserController::asJson($user);
+        }
+
+        $this->encodeResponseBody($response, $usersAsJson);
         return $response;
     }
 
