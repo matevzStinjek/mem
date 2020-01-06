@@ -3,6 +3,7 @@
 namespace App\Resources;
 
 use App\Exceptions\IllegalArgumentException;
+use App\Exceptions\UserException;
 use App\Helpers\FilteringHelper;
 use App\Helpers\PaginationHelper;
 use App\Helpers\SortingHelper;
@@ -10,7 +11,7 @@ use App\Http\Request;
 use App\Model\Entities\RegisteredUser;
 use Doctrine\ORM\QueryBuilder;
 
-class RegisteredUserResource extends AbstractResource {
+class UserResource extends AbstractResource {
 
     public function read(Request $request) {
         $user = $this->getEntity($request);
@@ -38,6 +39,11 @@ class RegisteredUserResource extends AbstractResource {
             throw new IllegalArgumentException('Password is required!');
         }
 
+        $user = $this->em->getRepository('App\Model\Entities\RegisteredUser')->findOneByEmail($entity->email);
+        if (isset($user)) {
+            throw new UserException('User with this email already exists');
+        }
+
         $user = new RegisteredUser($entity->name, $entity->email, $entity->password);
 
         if (property_exists($entity, 'roles')) {
@@ -56,9 +62,6 @@ class RegisteredUserResource extends AbstractResource {
 
         if (isset($entity->name)) {
             $user->setName($entity->name);
-        }
-        if (isset($entity->email)) {
-            $user->setEmail($entity->email);
         }
         if (isset($entity->password)) {
             $user->setPassword($entity->password);
