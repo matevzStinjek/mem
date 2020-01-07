@@ -11,9 +11,9 @@ class FilterChain {
 
         $filters = [
             new CorsFilter($container),
+            new RequestBodyParserFilter($container),
             new SessionFilter($container),
             new AuthFilter($container),
-            new RequestBodyParserFilter($container)
         ];
 
         foreach($filters as $filter) {

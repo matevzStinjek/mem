@@ -22,6 +22,4 @@ abstract class Entity
     public function getId() {
         return $this->id;
     }
-
-    // abstract public function getParent();
 }

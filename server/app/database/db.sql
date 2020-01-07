@@ -13,7 +13,7 @@ CREATE TABLE sessions (
     id varchar(64) COLLATE utf8_unicode_ci NOT NULL,
     userId INT UNSIGNED NOT NULL,
     creationTimestamp datetime NOT NULL,
-    lastActivityTimestamp datetime NOT NULL,
+    lastActivityTimestamp datetime DEFAULT NULL,
     httpUserAgent text COLLATE utf8_unicode_ci DEFAULT NULL,
     persistConfirmed tinyint(1) NOT NULL DEFAULT '0',
     PRIMARY KEY (id),

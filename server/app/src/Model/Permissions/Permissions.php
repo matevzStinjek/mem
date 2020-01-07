@@ -16,6 +16,7 @@ abstract class Permissions {
     }
 
     public function canCreateNewUser() { return $this->defaultPermission(__FUNCTION__, func_get_args(), true); }
+    public function canCreateNewSession() { return $this->defaultPermission(__FUNCTION__, func_get_args(), true); }
 
     /**
      * VISIBLE QUERY BUILDERS
