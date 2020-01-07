@@ -23,7 +23,6 @@ class UserResource extends AbstractResource {
         $qb = FilteringHelper::filterByRules($qb, $request->params, self::getFilteringRules());
         $qb = SortingHelper::orderByRules($qb, $request->params, self::getSortingRules());
 
-        // $users = $qb->getQuery()->getResult();
         $users = PaginationHelper::returnPage($qb, $request);
         return $users;
     }

@@ -22,7 +22,7 @@ class UsersController extends AbstractController {
 
         $usersAsJson = [];
         foreach ($users as $user) {
-            $usersAsJson[] = UserController::asJson($user);
+            $usersAsJson[] = UserController::asJson($user, $request->fields);
         }
 
         $this->encodeResponseBody($response, $usersAsJson);
