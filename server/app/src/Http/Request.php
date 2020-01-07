@@ -31,6 +31,12 @@ class Request {
     private $params;
 
     /**
+     * Requested fields parameter
+     * @var array|null
+     */
+    private $fields;
+
+    /**
      * Request headers
      * @var array
      */
@@ -47,6 +53,7 @@ class Request {
         $this->body    = (object)$request->getParsedBody();
         $this->args    = (object)$args;
         $this->params  = $request->getQueryParams();
+        $this->fields  = isset($this->params['fields']) ? explode(',', $this->params['fields']) : null;
         $this->headers = $request->getHeaders();
         $this->cookies = $request->getCookieParams();
         /** getServerParams, getUploadedFiles */
@@ -62,6 +69,8 @@ class Request {
                 return $this->args;
             case 'params':
                 return $this->params;
+            case 'fields':
+                return $this->fields;
             case 'headers':
                 return $this->headers;
             case 'cookies':

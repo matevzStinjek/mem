@@ -11,7 +11,7 @@ use Slim\Psr7\Response;
 abstract class AbstractController {
 
     protected $em;
-    protected $user;
+    private $user;
 
     public function __construct(ContainerInterface $container) {
         $this->em   = $container->get('em');

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Model\Entities\RegisteredUser;
+use App\Helpers\ResourceHelper;
 use App\Http\Request;
 use App\Resources\UserResource;
 use Psr\Container\ContainerInterface;
@@ -19,7 +20,7 @@ class UserController extends AbstractController {
 
     protected function handleGet(Request $request, Response $response) {
         $user = $this->resource->read($request);
-        $ret = self::asJson($user);
+        $ret = self::asJson($user, $request->fields);
         $this->encodeResponseBody($response, $ret);
         return $response;
     }
@@ -38,7 +39,7 @@ class UserController extends AbstractController {
         return $response;
     }
 
-    public static function asJson(RegisteredUser $user) {
+    public static function asJson(RegisteredUser $user, $fields = null) {
         $resourceMap = [];
 
         $resourceMap += [
@@ -49,10 +50,6 @@ class UserController extends AbstractController {
             'creationTimestamp' => function($user) { return $user->getCreationTimestamp()->format('Y-m-d H:i:s'); },
         ];
 
-        $ret = [];
-        foreach($resourceMap as $key => $mapper) {
-            $ret[$key] = $mapper($user);
-        }
-        return $ret;
+        return ResourceHelper::mapValues($user, $resourceMap, $fields);
     }
 }
