@@ -8,6 +8,8 @@ class Config {
 
     const BASE_URL = 'http://localhost:8081';
 
+    const COOKIE_NAME = 'mem-cooko';
+
     public function __construct($config) {
         $this->config = $config;
     }
@@ -32,6 +34,8 @@ class Config {
         switch ($name) {
             case 'baseUrl':
                 return self::BASE_URL;
+            case 'cookieName':
+                return self::COOKIE_NAME;
             case 'secret':
                 return $this->getSecret();
             case 'bucket':

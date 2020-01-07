@@ -11,6 +11,9 @@ class Router {
     const API_ENDPOINTS = [
         ''                     => 'ExampleController',
         // ''                     => 'PlatformController',
+        
+        'sessions'                 => 'SessionsController',
+        // 'sessions/{id}'            => 'SessionController',
 
         'users'                 => 'UsersController',
         'users/{id}'            => 'UserController',

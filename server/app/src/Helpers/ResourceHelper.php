@@ -10,8 +10,6 @@ class ResourceHelper {
         $fields = $fields ?? array_keys($resourceMap);
         $fields = array_intersect($fields, array_keys($resourceMap)); // remove invalid fields
 
-        error_log(json_encode($fields));
-
         $ret = [];
         foreach($fields as $field) {
             $ret[$field] = $resourceMap[$field]($entity);
