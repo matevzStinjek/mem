@@ -14,8 +14,9 @@ abstract class AbstractController {
     private $user;
 
     public function __construct(ContainerInterface $container) {
-        $this->em   = $container->get('em');
-        $this->user = $container->get('user');
+        $this->em      = $container->get('em');
+        $this->user    = $container->get('user');
+        $this->session = $container->get('session');
     }
 
     public function __invoke(PsrRequest $request, Response $response, array $args) {
@@ -25,7 +26,7 @@ abstract class AbstractController {
         }
 
         try {
-            $request = new Request($request, $args, $this->user);
+            $request = new Request($request, $args, $this->user, $this->session);
             return $this->$handlerMethod($request, $response);
         } catch (InternalServerErrorException $e) {
             error_log($e->getMessage());
