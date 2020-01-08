@@ -25,13 +25,22 @@ class Session {
     private $user;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $persistConfirmed = false;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $lastActivityTimestamp;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $creationTimestamp;
 
-    public function __construct(RegisteredUser $user) {
+    public function __construct() {
         $this->generateId();
-        $this->setUser($user);
         $this->creationTimestamp = new \DateTime;
     }
 
@@ -49,6 +58,14 @@ class Session {
 
     public function getUser() {
         return $this->user;
+    }
+
+    public function confirmPersist() {
+        $this->persistConfirmed = true;
+    }
+
+    public function updateLastActivityTimestamp() {
+        $this->lastActivityTimestamp = new \DateTime;
     }
 
     public function getCreationTimestamp() {

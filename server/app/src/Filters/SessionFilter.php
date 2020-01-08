@@ -2,6 +2,7 @@
 
 namespace App\Filters;
 
+use App\Model\Entities\Session;
 use Dflydev\FigCookies\Cookies;
 use Dflydev\FigCookies\FigRequestCookies;
 use Dflydev\FigCookies\SetCookies;
@@ -17,18 +18,16 @@ class SessionFilter implements Filter {
     private $cookieName;
 
     public function __construct(Container $container) {
-        $this->container = $container;
-        $this->em = $container->get('em');
+        $this->container  = $container;
+        $this->em         = $container->get('em');
         $this->cookieName = $container->get('config')->cookieName;
     }
 
     public function __invoke(Request $request, RequestHandler $handler): Response {
         $cookie = FigRequestCookies::get($request, $this->cookieName);
 
-        error_log(json_encode($cookie));
-
-        // $session = $this->em->getRepository('App\Model\Entities\Session')->findById(1);
-        // $this->container->set('session', $session);
+        $session = $this->em->getRepository('App\Model\Entities\Session')->findOneById($cookie->value) ?? new Session;
+        $this->container->set('session', $session);
         $response = $handler->handle($request);
 
         // $setCookies = SetCookies::fromResponse($response);
