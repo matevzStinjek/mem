@@ -9,13 +9,15 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 class PaginationHelper {
 
     const DEFAULT_RESULTS_PER_PAGE = 100;
+    const MAX_RESULTS_PER_PAGE = 500;
 
     public static function returnPage(QueryBuilder $qb, Request $request) {
-        $params = $request->params;
         $paginator = new Paginator($qb->getQuery());
+        $params = $request->params;
 
         $offset = max($params['page'] ?? 0, 0);
-        $resultsPerPage = max($params['perPage'] ?? self::DEFAULT_RESULTS_PER_PAGE, 0);
+        $resultsPerPage = $params['perPage'] ?? self::DEFAULT_RESULTS_PER_PAGE;
+        $resultsPerPage = max(0, min($resultsPerPage, self::MAX_RESULTS_PER_PAGE));
 
         $paginator->getQuery()->setFirstResult($offset);
         $paginator->getQuery()->setMaxResults($resultsPerPage);
