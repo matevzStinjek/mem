@@ -7,9 +7,9 @@ use Doctrine\ORM\QueryBuilder;
 class SortingHelper {
 
     public static function orderByRules(QueryBuilder $qb, array $params, array $rules) {
-        $sortingParams = self::mapRules($params);
+        $sortingRules = self::mapRules($params);
 
-        foreach ($sortingParams as $prop => $direction) {
+        foreach ($sortingRules as $prop => $direction) {
             if (array_key_exists($prop, $rules)) {
                 $qb = $rules[$prop]($qb, $direction);
             }
