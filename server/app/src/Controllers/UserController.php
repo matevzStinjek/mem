@@ -46,7 +46,7 @@ class UserController extends AbstractController {
             'id'                => function($user) { return $user->getId(); },
             'name'              => function($user) { return $user->getName(); },
             'email'             => function($user) { return $user->getEmail(); },
-            'userGroupsIds'     => function($user) { return array_map(fn($userGroup) => $userGroup->getId(), $user->getUserGroups()->toArray()); },
+            'userGroupsIds'     => function($user) { return array_map(fn($userGroup) => $userGroup->getId(), $user->getUserGroups()); },
             'creationTimestamp' => function($user) { return $user->getCreationTimestamp()->format('Y-m-d H:i:s'); },
         ];
 

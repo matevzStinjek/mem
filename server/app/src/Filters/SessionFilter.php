@@ -24,9 +24,10 @@ class SessionFilter implements Filter {
     }
 
     public function __invoke(Request $request, RequestHandler $handler): Response {
-        $cookie = FigRequestCookies::get($request, $this->cookieName);
+        // $cookie = FigRequestCookies::get($request, $this->cookieName);
 
-        $session = $this->em->getRepository('App\Model\Entities\Session')->findOneById($cookie->value) ?? new Session;
+        // $session = $this->em->getRepository('App\Model\Entities\Session')->findOneById($cookie->value) ?? new Session;
+        $session = new Session;
         $this->container->set('session', $session);
         $response = $handler->handle($request);
 

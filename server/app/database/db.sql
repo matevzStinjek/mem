@@ -55,16 +55,21 @@ CREATE TABLE folders (
 
 INSERT INTO folders VALUES(0, 'kuba', 1, NOW());
 
--- TODO
 CREATE TABLE folderMemberships (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    userId INT UNSIGNED,
-    userGroupId INT UNSIGNED,
+    userId INT UNSIGNED DEFAULT NULL,
+    userGroupId INT UNSIGNED DEFAULT NULL,
     folderId INT UNSIGNED NOT NULL,
+    readOnly tinyint(1) NOT NULL DEFAULT '0',
+    creationTimestamp DATETIME NOT NULL,
+    lastModificationTimestamp DATETIME DEFAULT NULL,
     PRIMARY KEY (id),
-    ...
+    UNIQUE KEY folderMemberships_userGroupId_folderId_uk (userGroupId,folderId),
+    KEY folderMemberships_folderId_k (folderId),
+    CONSTRAINT folderMemberships_userId_fk FOREIGN KEY (userId) REFERENCES users (id),
+    CONSTRAINT folderMemberships_userGroupId_fk FOREIGN KEY (userGroupId) REFERENCES userGroups (id),
+    CONSTRAINT folderMemberships_folderId_fk FOREIGN KEY (folderId) REFERENCES folders (id)
 );
--- EMD TODO
 
 CREATE TABLE folderContent (
     blobHash char(64) COLLATE utf8_unicode_ci NOT NULL,
