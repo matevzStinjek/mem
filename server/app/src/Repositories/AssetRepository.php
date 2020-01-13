@@ -6,8 +6,8 @@ use Aws\S3\S3Client;
 
 class AssetRepository {
 
-    private $bucket;
     private $s3;
+    private $bucket;
 
     public function __construct(S3Client $s3, string $bucket) {
         $this->s3     = $s3;
