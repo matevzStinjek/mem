@@ -15,6 +15,9 @@ class UserResource extends AbstractResource {
 
     public function read(Request $request) {
         $user = $this->getEntity($request);
+        if (empty($user)) {
+            throw new UserException('User not found');
+        }
         return $user;
     }
 
@@ -57,9 +60,12 @@ class UserResource extends AbstractResource {
     }
 
     public function update(Request $request) {
-        $entity = $request->body;
         $user = $this->getEntity($request);
+        if (empty($user)) {
+            throw new UserException('User not found');
+        }
 
+        $entity = $request->body;
         if (isset($entity->name)) {
             $user->setName($entity->name);
         }
@@ -75,6 +81,9 @@ class UserResource extends AbstractResource {
 
     public function remove(Request $request) {
         $user = $this->getEntity($request);
+        if (empty($user)) {
+            throw new UserException('User not found');
+        }
 
         $this->em->remove($user);
         $this->em->flush();

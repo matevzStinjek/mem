@@ -62,9 +62,9 @@ class UserController extends AbstractController {
 
         if ($ctx->user->getPermissions()->canReadUserDetails($user)) {
             $resourceMap += [
-                'userGroupsIds'       => function($user) { return array_map(fn($userGroup) => $userGroup->getId(), $user->getUserGroups()); },
-                'folderMembershipIds' => function($user) { return array_map(fn($folderMembership) => $folderMembership->getId(), $user->getFolderMemberships()); },
-                'creationTimestamp'   => function($user) { return $user->getCreationTimestamp()->format('Y-m-d H:i:s'); },
+                'userGroupsIds'     => function($user) { return array_map(fn($userGroup) => $userGroup->getId(), $user->getUserGroups()); },
+                'folderIds'         => function($user) { return array_map(fn($folder) => $folder->getId(), $user->getFolders()); },
+                'creationTimestamp' => function($user) { return $user->getCreationTimestamp()->format('Y-m-d H:i:s'); },
             ];
         }
 

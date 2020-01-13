@@ -2,20 +2,28 @@
 
 namespace App\Model\Permissions;
 
+use App\Model\Entities\RegisteredUser;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 
 abstract class Permissions {
 
-    /**
-     * CREATE Permissions
-     */
-
     protected function defaultPermission($functionName, array $args, $readOnly) {
         return false;
     }
 
+    /**
+     * READ PERMISSIONS
+     */
+
+    public function canReadUserDetails(RegisteredUser $user) { return $this->defaultPermission(__FUNCTION__, func_get_args(), true); }
+
+    /**
+     * CREATE PERMISSIONS
+     */
+
     public function canCreateNewUser() { return $this->defaultPermission(__FUNCTION__, func_get_args(), true); }
+    public function canCreateNewUFolder() { return $this->defaultPermission(__FUNCTION__, func_get_args(), true); }
     public function canCreateNewSession() { return $this->defaultPermission(__FUNCTION__, func_get_args(), true); }
 
     /**
@@ -35,6 +43,17 @@ abstract class Permissions {
 
     protected function addVisibleRegisteredUsersQueryBuilderConditions(QueryBuilder $qb) { $this->defaultAddQueryBuilderConditions(__FUNCTION__, $qb); }
 
+    public function getVisibleFoldersQueryBuilder(EntityManager $em) {
+        $qb = $em->createQueryBuilder()
+            ->select('folder')
+            ->from('App\Model\Entities\Folder', 'folder');
+
+        $this->addVisibleRegisteredUsersQueryBuilderConditions($qb);
+        return $qb;
+    }
+
+    protected function addVisibleFoldersQueryBuilderConditions(QueryBuilder $qb) { $this->defaultAddQueryBuilderConditions(__FUNCTION__, $qb); }
+
     /**
      * SEARCHABLE QUERY BUILDERS
      */
@@ -49,4 +68,15 @@ abstract class Permissions {
     }
 
     protected function addSearchableRegisteredUsersQueryBuilderConditions(QueryBuilder $qb) { $this->defaultAddQueryBuilderConditions(__FUNCTION__, $qb); }
+
+    public function getSearchableFoldersQueryBuilder(EntityManager $em) {
+        $qb = $em->createQueryBuilder()
+            ->select('folder')
+            ->from('App\Model\Entities\Folder', 'folder');
+
+        $this->addSearchableFoldersQueryBuilderConditions($qb);
+        return $qb;
+    }
+
+    protected function addSearchableFoldersQueryBuilderConditions(QueryBuilder $qb) { $this->defaultAddQueryBuilderConditions(__FUNCTION__, $qb); }
 }

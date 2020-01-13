@@ -9,17 +9,16 @@ class Router {
     const API_PREFIX = '/api/';
 
     const API_ENDPOINTS = [
-        ''                     => 'ExampleController',
-        // ''                     => 'PlatformController',
+        // ''                      => 'PlatformController',
         
-        'sessions'                 => 'SessionsController',
-        // 'sessions/{id}'            => 'SessionController',
+        // 'session'               => 'SessionController',
+        // 'sessions'              => 'SessionsController',
 
         'users'                 => 'UsersController',
         'users/{id}'            => 'UserController',
 
-        // 'folders'               => 'FoldersController',
-        // 'folders/{id}'          => 'FolderController',
+        'folders'               => 'FoldersController',
+        'folders/{id}'          => 'FolderController',
 
         // 'blobs'                 => 'BlobsController',
         // 'blobs/{hash}'          => 'BlobController',

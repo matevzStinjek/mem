@@ -15,11 +15,19 @@ class SauronPermissions extends Permissions {
         $qb->andWhere('1=1');
     }
 
+    protected function addVisibleFoldersQueryBuilderConditions(QueryBuilder $qb) {
+        $qb->andWhere('1=1');
+    }
+
     /**
-     * VISIBLE QUERY BUILDERS
+     * SEARCHABLE QUERY BUILDERS
      */
 
     protected function addSearchableRegisteredUsersQueryBuilderConditions(QueryBuilder $qb) {
+        $qb->andWhere('1=1');
+    }
+
+    protected function addSearchableFoldersQueryBuilderConditions(QueryBuilder $qb) {
         $qb->andWhere('1=1');
     }
 }
