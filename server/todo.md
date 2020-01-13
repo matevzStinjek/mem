@@ -1,12 +1,14 @@
+THIS PHASE:
+create visible/searchable folder query from userId
+test folders with reg and unreg user
+
 NEXT PHASE:
-first folder controller, resource, test with reg and unreg user
-* controllers for: Folder, FolderMembership, UserGroup
+* controllers for UserGroup
 * server side cookie sessions
 * check s3 again, blobcontroller
 * blob <> assetcontroller <> foldercontent relationship
 * UserGroupController.php && Resource
 * facebook login integration
-* limit User(s)Controller api with permissions
 
 PHASE + 1:
 * censor github settings history
