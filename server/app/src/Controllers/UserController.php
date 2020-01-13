@@ -20,35 +20,53 @@ class UserController extends AbstractController {
 
     protected function handleGet(Request $request, Response $response) {
         $user = $this->resource->read($request);
-        $ret = self::asJson($user, $request->fields);
+
+        $ctx = (object)[
+            'user' => $request->user
+        ];
+        $ret = self::asJson($user, $request->fields, $ctx);
         $this->encodeResponseBody($response, $ret);
         return $response;
     }
 
     protected function handlePut(Request $request, Response $response) {
         $user = $this->resource->update($request);
-        $ret = self::asJson($user);
+
+        $ctx = (object)[
+            'user' => $request->user
+        ];
+        $ret = self::asJson($user, $request->fields, $ctx);
         $this->encodeResponseBody($response, $ret);
         return $response;
     }
 
     protected function handleDelete(Request $request, Response $response) {
         $user = $this->resource->remove($request);
-        $ret = self::asJson($user);
+
+        $ctx = (object)[
+            'user' => $request->user
+        ];
+        $ret = self::asJson($user, $request->fields, $ctx);
         $this->encodeResponseBody($response, $ret);
         return $response;
     }
 
-    public static function asJson(RegisteredUser $user, $fields = null) {
+    public static function asJson(RegisteredUser $user, $fields = null, $ctx = null) {
         $resourceMap = [];
 
         $resourceMap += [
-            'id'                => function($user) { return $user->getId(); },
-            'name'              => function($user) { return $user->getName(); },
-            'email'             => function($user) { return $user->getEmail(); },
-            'userGroupsIds'     => function($user) { return array_map(fn($userGroup) => $userGroup->getId(), $user->getUserGroups()); },
-            'creationTimestamp' => function($user) { return $user->getCreationTimestamp()->format('Y-m-d H:i:s'); },
+            'id'    => function($user) { return $user->getId(); },
+            'name'  => function($user) { return $user->getName(); },
+            'email' => function($user) { return $user->getEmail(); },
         ];
+
+        if ($ctx->user->getPermissions()->canReadUserDetails($user)) {
+            $resourceMap += [
+                'userGroupsIds'       => function($user) { return array_map(fn($userGroup) => $userGroup->getId(), $user->getUserGroups()); },
+                'folderMembershipIds' => function($user) { return array_map(fn($folderMembership) => $folderMembership->getId(), $user->getFolderMemberships()); },
+                'creationTimestamp'   => function($user) { return $user->getCreationTimestamp()->format('Y-m-d H:i:s'); },
+            ];
+        }
 
         return ResourceHelper::mapValues($user, $resourceMap, $fields);
     }

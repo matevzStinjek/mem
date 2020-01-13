@@ -20,9 +20,13 @@ class UsersController extends AbstractController {
     protected function handleGet(Request $request, Response $response) {
         $users = $this->resource->readAll($request);
 
+        $ctx = (object)[
+            'user' => $request->user
+        ];
+
         $usersAsJson = [];
         foreach ($users as $user) {
-            $usersAsJson[] = UserController::asJson($user, $request->fields);
+            $usersAsJson[] = UserController::asJson($user, $request->fields, $ctx);
         }
 
         $this->encodeResponseBody($response, $usersAsJson);
@@ -34,7 +38,11 @@ class UsersController extends AbstractController {
             throw new UserException('You do not have the required permissions to create a new user.');
 
         $user = $this->resource->create($request);
-        $ret = UserController::asJson($user);
+
+        $ctx = (object)[
+            'user' => $request->user
+        ];
+        $ret = UserController::asJson($user, $request->fields, $ctx);
         $this->encodeResponseBody($response, $ret);
         return $response;
     }
