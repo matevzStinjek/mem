@@ -2,6 +2,10 @@ import axios from 'axios'
 
 class ApiClient {
 
+    constructor () {
+        this.baseURL = 'localhost:8081/api/';
+    }
+
     get (url) {
         return this._postRequest('GET', url)
     }
@@ -19,8 +23,7 @@ class ApiClient {
     }
 
     _postRequest (method, url, data = null) {
-        url = `api/${url}`
-        return axios({ method, url, data })
+        return axios({ method, baseUrl: this.baseURL, url, data })
     }
 }
 
