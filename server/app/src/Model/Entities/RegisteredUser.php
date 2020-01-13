@@ -58,6 +58,11 @@ class RegisteredUser extends Entity implements User {
     private $userGroups;
 
     /**
+     * @ORM\OneToMany(targetEntity="FolderMembership", mappedBy="user", cascade={"remove"})
+     */
+    private $folderMemberships;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $creationTimestamp;
@@ -69,6 +74,7 @@ class RegisteredUser extends Entity implements User {
         $this->setEmail($email);
         $this->setPassword($password);
         $this->userGroups = new ArrayCollection;
+        $this->folderMemberships = new ArrayCollection;
         $this->creationTimestamp = new \DateTime;
     }
 
@@ -182,10 +188,26 @@ class RegisteredUser extends Entity implements User {
     }
 
     public function getUserGroups() {
-        return $this->userGroups;
+        return $this->userGroups->toArray();
+    }
+
+    public function getFolderMemberships() {
+        return $this->folderMemberships->toArray();
+    }
+
+    public function getFolders() {
+        $folders = array_map(fn($userGroup) => $userGroup->getFolderMemberships(), $this->getUserGroups()); // map user group's memberships
+        $folders = array_merge($this->getFolderMemberships(), ...$folders);                                 // merge with user memberships
+        $folders = array_map(fn($userGroupFolder) => $userGroupFolder->getFolder(), $folders);              // map memberships' folders
+        return array_unique($folders);
     }
 
     public function getCreationTimestamp() {
         return $this->creationTimestamp;
+    }
+
+    /** Used for comparison of unique users */
+    public function __toString() {
+        return (string)$this->id;
     }
 }

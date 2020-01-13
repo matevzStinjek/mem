@@ -1,12 +1,11 @@
 NEXT PHASE:
+first folder controller, resource, test with reg and unreg user
+* controllers for: Folder, FolderMembership, UserGroup
 * server side cookie sessions
 * check s3 again, blobcontroller
-* architecture foldermembership, usergroupmembership
 * blob <> assetcontroller <> foldercontent relationship
-* usersgroups <> foldersMembership <> folder
 * UserGroupController.php && Resource
 * facebook login integration
-* FolderMembershipsController.php
 * limit User(s)Controller api with permissions
 
 PHASE + 1:

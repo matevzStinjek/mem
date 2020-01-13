@@ -4,6 +4,7 @@ namespace App\Model\Entities;
 
 use App\Exceptions\IllegalArgumentException;
 use App\Util\Validator;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,14 +24,18 @@ class UserGroup extends Entity {
     private $users;
 
     /**
+     * @ORM\OneToMany(targetEntity="FolderMembership", mappedBy="userGroup", cascade={"remove"})
+     */
+    private $folderMemberships;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $creationTimestamp;
 
     public function __construct($name, $users) {
-        $this->users = new ArrayCollection;
-
         $this->setName($name);
+        $this->users = new ArrayCollection;
         $this->addUsers($users);
         $this->creationTimestamp = new \DateTime;
     }
@@ -58,7 +63,11 @@ class UserGroup extends Entity {
     }
 
     public function getUsers() {
-        return $this->users;
+        return $this->users->toArray();
+    }
+
+    public function getFolderMemberships() {
+        return $this->folderMemberships->toArray();
     }
 
     public function getCreationTimestamp() {

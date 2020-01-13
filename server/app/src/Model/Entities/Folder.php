@@ -4,6 +4,7 @@ namespace App\Model\Entities;
 
 use App\Exceptions\IllegalArgumentException;
 use App\Util\Validator;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,13 +25,20 @@ class Folder extends Entity {
     private $creator;
 
     /**
+     * @ORM\OneToMany(targetEntity="FolderMembership", mappedBy="folder")
+     * cascade? orphanRemoval?
+     */
+    protected $memberships;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $creationTimestamp;
 
     public function __construct($name, $creator) {
         $this->setName($name);
-        $this->setCreator($creator);
+        $this->creator = $creator;
+        $this->memberships = new ArrayCollection;
         $this->creationTimestamp = new \DateTime;
     }
 
@@ -48,15 +56,22 @@ class Folder extends Entity {
         return $this->name;
     }
 
-    public function setCreator($creator) {
-        $this->creator = $creator;
-    }
-
     public function getCreator() {
         return $this->creator;
     }
 
+    public function getMembers() {
+        $users = array_map(fn($membership) => $membership->getUsers(), $this->memberships->toArray());
+        $users = array_merge(...$users);
+        return array_unique($users);
+    }
+
     public function getCreationTimestamp() {
         return $this->creationTimestamp;
+    }
+
+    /** Used for comparison of unique folders */
+    public function __toString() {
+        return (string)$this->id;
     }
 }
