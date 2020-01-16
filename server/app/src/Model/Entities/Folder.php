@@ -25,8 +25,7 @@ class Folder extends Entity {
     private $creator;
 
     /**
-     * @ORM\OneToMany(targetEntity="FolderMembership", mappedBy="folder")
-     * cascade? orphanRemoval?
+     * @ORM\OneToMany(targetEntity="FolderMembership", mappedBy="folder", cascade={"remove", "persist"}, orphanRemoval=true)
      */
     protected $memberships;
 
@@ -64,6 +63,10 @@ class Folder extends Entity {
         $users = array_map(fn($membership) => $membership->getUsers(), $this->memberships->toArray());
         $users = array_merge(...$users);
         return array_unique($users);
+    }
+
+    public function setMemberships(array $memberships) {
+        $this->memberships = $memberships;
     }
 
     public function getCreationTimestamp() {

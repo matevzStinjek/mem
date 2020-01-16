@@ -9,6 +9,7 @@ use App\Helpers\PaginationHelper;
 use App\Helpers\SortingHelper;
 use App\Http\Request;
 use App\Model\Entities\Folder;
+use App\Model\Entities\FolderMembership;
 
 class FolderResource extends AbstractResource {
 
@@ -32,13 +33,23 @@ class FolderResource extends AbstractResource {
     public function create(Request $request) {
         $entity = $request->body;
         if (empty($entity->name)) {
-            throw new \Exception('Name is required!');
+            throw new IllegalArgumentException('Name is required!');
         }
 
         $folder = new Folder($entity->name, $request->user);
 
-        // create folderMembership w/ user(Group)
-        // persist it & set it
+        // extract to helper
+        if (property_exists($entity, 'userMemberships')) {
+            $users = array_filter(array_map(fn($userId) => $this->em->find('App\Model\Entities\RegisteredUser', $userId), $entity->userMemberships));
+            $membershipsViaUser = array_map(fn($user) => new FolderMembership($folder, $user), $users);
+        }
+        if (property_exists($entity, 'userGroupMemberships')) {
+            $userGroups = array_filter(array_map(fn($useGrouprId) => $this->em->find('App\Model\Entities\UserGroups', $useGrouprId), $entity->userGroupMemberships));
+            $membershipsViaUserGroup = array_map(fn($userGroup) => new FolderMembership($folder, $userGroup), $userGroups);
+        }
+        $memberships = array_merge($membershipsViaUser ?? [], $membershipsViaUserGroup ?? []);
+        $memberships[] = new FolderMembership($folder, $request->user); // TODO: don't add owner twice
+        $folder->setMemberships($memberships);
 
         $this->em->persist($folder);
         $this->em->flush();
@@ -57,8 +68,18 @@ class FolderResource extends AbstractResource {
             $folder->setName($entity->name);
         }
 
-        // create folderMembership w/ user(Group) if not exist
-        // persist it
+        // extract to helper
+        if (property_exists($entity, 'userMemberships')) {
+            $users = array_filter(array_map(fn($userId) => $this->em->find('App\Model\Entities\RegisteredUser', $userId), $entity->userMemberships));
+            $membershipsViaUser = array_map(fn($user) => new FolderMembership($folder, $user), $users);
+        }
+        if (property_exists($entity, 'userGroupMemberships')) {
+            $userGroups = array_filter(array_map(fn($useGrouprId) => $this->em->find('App\Model\Entities\UserGroup', $useGrouprId), $entity->userGroupMemberships));
+            $membershipsViaUserGroup = array_map(fn($userGroup) => new FolderMembership($folder, $userGroup), $userGroups);
+        }
+        $memberships = array_merge($membershipsViaUser ?? [], $membershipsViaUserGroup ?? []);
+        $memberships[] = new FolderMembership($folder, $request->user); // TODO: don't add owner twice
+        $folder->setMemberships($memberships);
 
         $this->em->persist($folder);
         $this->em->flush();
