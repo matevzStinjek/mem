@@ -43,9 +43,16 @@ class FolderMembership extends Entity {
      */
     private $lastModificationTimestamp;
 
-    public function __construct(Folder $folder) {
+    public function __construct(Folder $folder, $member) {
         $this->folder = $folder;
+        $this->setMember($member);
         $this->creationTimestamp = new \DateTime;
+    }
+
+    private function setMember($member) {
+        $clazz = preg_replace('/.*[^User(Group)]/', '', get_class($member));
+        $setter = "set$clazz";
+        $this->$setter($member);
     }
 
     public function setUser(RegisteredUser $user) {

@@ -1,9 +1,10 @@
 THIS PHASE:
 create visible/searchable folder query from userId
+add foldermembership via folderController
+controllers for UserGroup
 test folders with reg and unreg user
 
 NEXT PHASE:
-* controllers for UserGroup
 * server side cookie sessions
 * check s3 again, blobcontroller
 * blob <> assetcontroller <> foldercontent relationship

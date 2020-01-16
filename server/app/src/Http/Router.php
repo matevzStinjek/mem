@@ -25,10 +25,8 @@ class Router {
     ];
 
     public static function registerRouteCallbacks(Application $app) {
-        $app->group(self::API_PREFIX, function() use($app) {
-            foreach(self::API_ENDPOINTS as $route => $controller) {
-                $app->any(self::API_PREFIX . $route, "App\\Controllers\\$controller");
-            }
-        });
+        foreach(self::API_ENDPOINTS as $route => $controller) {
+            $app->any(self::API_PREFIX . $route, "App\\Controllers\\$controller");
+        }
     }
 }
