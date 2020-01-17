@@ -15,6 +15,10 @@ class SauronPermissions extends Permissions {
         $qb->andWhere('1=1');
     }
 
+    protected function addVisibleUserGroupsQueryBuilderConditions(QueryBuilder $qb) {
+        $qb->andWhere('1=1');
+    }
+
     protected function addVisibleFoldersQueryBuilderConditions(QueryBuilder $qb) {
         $qb->andWhere('1=1');
     }
@@ -24,6 +28,10 @@ class SauronPermissions extends Permissions {
      */
 
     protected function addSearchableRegisteredUsersQueryBuilderConditions(QueryBuilder $qb) {
+        $qb->andWhere('1=1');
+    }
+
+    protected function addSearchableUserGroupsQueryBuilderConditions(QueryBuilder $qb) {
         $qb->andWhere('1=1');
     }
 

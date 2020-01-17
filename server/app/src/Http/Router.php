@@ -17,6 +17,9 @@ class Router {
         'users'                 => 'UsersController',
         'users/{id}'            => 'UserController',
 
+        'userGroups'            => 'UserGroupsController',
+        'userGroups/{id}'       => 'UserGroupController',
+
         'folders'               => 'FoldersController',
         'folders/{id}'          => 'FolderController',
 

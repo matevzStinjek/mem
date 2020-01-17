@@ -23,6 +23,7 @@ abstract class Permissions {
      */
 
     public function canCreateNewUser() { return $this->defaultPermission(__FUNCTION__, func_get_args(), true); }
+    public function canCreateNewUserGroup() { return $this->defaultPermission(__FUNCTION__, func_get_args(), true); }
     public function canCreateNewFolder() { return $this->defaultPermission(__FUNCTION__, func_get_args(), true); }
     public function canCreateNewSession() { return $this->defaultPermission(__FUNCTION__, func_get_args(), true); }
 
@@ -30,7 +31,9 @@ abstract class Permissions {
      * VISIBLE QUERY BUILDERS
      */
 
-    protected function defaultAddQueryBuilderConditions($queryName, QueryBuilder $qb) {}
+    protected function defaultAddQueryBuilderConditions($queryName, QueryBuilder $qb) {
+        $qb->andWhere('0=1'); // TODO: i guess?
+    }
 
     public function getVisibleRegisteredUsersQueryBuilder(EntityManager $em) {
         $qb = $em->createQueryBuilder()
@@ -42,6 +45,17 @@ abstract class Permissions {
     }
 
     protected function addVisibleRegisteredUsersQueryBuilderConditions(QueryBuilder $qb) { $this->defaultAddQueryBuilderConditions(__FUNCTION__, $qb); }
+
+    public function getVisibleUserGroupsQueryBuilder(EntityManager $em) {
+        $qb = $em->createQueryBuilder()
+            ->select('userGroup')
+            ->from('App\Model\Entities\UserGroup', 'userGroup');
+
+        $this->addVisibleUserGroupsQueryBuilderConditions($qb);
+        return $qb;
+    }
+
+    protected function addVisibleUserGroupsQueryBuilderConditions(QueryBuilder $qb) { $this->defaultAddQueryBuilderConditions(__FUNCTION__, $qb); }
 
     public function getVisibleFoldersQueryBuilder(EntityManager $em) {
         $qb = $em->createQueryBuilder()
@@ -68,6 +82,17 @@ abstract class Permissions {
     }
 
     protected function addSearchableRegisteredUsersQueryBuilderConditions(QueryBuilder $qb) { $this->defaultAddQueryBuilderConditions(__FUNCTION__, $qb); }
+
+    public function getSearchableUserGroupsQueryBuilder(EntityManager $em) {
+        $qb = $em->createQueryBuilder()
+            ->select('userGroup')
+            ->from('App\Model\Entities\UserGroup', 'userGroup');
+
+        $this->addSearchableUserGroupsQueryBuilderConditions($qb);
+        return $qb;
+    }
+
+    protected function addSearchableUserGroupsQueryBuilderConditions(QueryBuilder $qb) { $this->defaultAddQueryBuilderConditions(__FUNCTION__, $qb); }
 
     public function getSearchableFoldersQueryBuilder(EntityManager $em) {
         $qb = $em->createQueryBuilder()

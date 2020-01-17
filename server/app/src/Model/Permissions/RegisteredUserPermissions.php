@@ -29,11 +29,19 @@ class RegisteredUserPermissions extends Permissions {
         return true;
     }
 
+    public function canCreateNewUser() {
+        return true;
+    }
+
     /**
      * VISIBLE QUERY BUILDERS
      */
 
     protected function addVisibleRegisteredUsersQueryBuilderConditions(QueryBuilder $qb) {
+        $qb->andWhere('1=1');
+    }
+
+    protected function addVisibleUserGroupsQueryBuilderConditions(QueryBuilder $qb) {
         $qb->andWhere('1=1');
     }
 
@@ -46,6 +54,10 @@ class RegisteredUserPermissions extends Permissions {
      */
 
     protected function addSearchableRegisteredUsersQueryBuilderConditions(QueryBuilder $qb) {
+        $qb->andWhere('1=1');
+    }
+
+    protected function addSearchableUserGroupsQueryBuilderConditions(QueryBuilder $qb) {
         $qb->andWhere('1=1');
     }
 

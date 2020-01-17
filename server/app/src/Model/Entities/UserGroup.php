@@ -19,7 +19,7 @@ class UserGroup extends Entity {
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="RegisteredUser", mappedBy="userGroups")
+     * @ORM\ManyToMany(targetEntity="RegisteredUser", mappedBy="userGroups", cascade={"persist"})
      */
     private $users;
 
@@ -36,7 +36,7 @@ class UserGroup extends Entity {
     public function __construct($name, $users) {
         $this->setName($name);
         $this->users = new ArrayCollection;
-        $this->addUsers($users);
+        $this->setUsers($users);
         $this->creationTimestamp = new \DateTime;
     }
 
@@ -54,12 +54,8 @@ class UserGroup extends Entity {
         return $this->name;
     }
 
-    public function addUsers($users) {
-        if (!is_array($users)) {
-            throw new IllegalArgumentException('Users must be an array of RegisteredUser entities.');
-        }
-
-        $this->users = new ArrayCollection(array_merge($this->users->toArray(), $users->toArray()));
+    public function setUsers($users) {
+        $this->users = $users;
     }
 
     public function getUsers() {
