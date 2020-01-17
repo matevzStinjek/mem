@@ -1,5 +1,6 @@
 THIS PHASE:
 create visible/searchable folder query from userId
+discriminator pattern unclaimed vs registered user
 add foldermembership via folderController
 controllers for UserGroup
 test folders with reg and unreg user
@@ -13,7 +14,6 @@ NEXT PHASE:
 
 PHASE + 1:
 * censor github settings history
-* discriminator pattern doctrine
 * s3 stream video
 * fetch blobs of thumbnail/parameter size (?size=300x200) (aws lambda)
 * remove unneeded packages like doctrine/annotations
