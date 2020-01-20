@@ -64,12 +64,19 @@ CREATE TABLE folderMemberships (
     creationTimestamp DATETIME NOT NULL,
     lastModificationTimestamp DATETIME DEFAULT NULL,
     PRIMARY KEY (id),
-    UNIQUE KEY folderMemberships_userGroupId_folderId_uk (userGroupId,folderId),
+    UNIQUE KEY folderMemberships_userId_userGroupId_folderId_uk (userId, userGroupId, folderId),
     KEY folderMemberships_folderId_k (folderId),
+    KEY folderMemberships_userGrouupId_k (userGroupId),
+    KEY folderMemberships_userId_k (userId),
     CONSTRAINT folderMemberships_userId_fk FOREIGN KEY (userId) REFERENCES users (id),
     CONSTRAINT folderMemberships_userGroupId_fk FOREIGN KEY (userGroupId) REFERENCES userGroups (id),
     CONSTRAINT folderMemberships_folderId_fk FOREIGN KEY (folderId) REFERENCES folders (id)
 );
+
+CREATE VIEW v_userFolderAS
+    SELECT f.*, u* FROM folderMemberships as fm, users as u, folders as f WHERE fm.folderId = f.id AND fm.userId = u.id
+UNION
+    SELECT f.*, u* FROM folderMemberships as fm, users as u, userGroups as ug, userGroupsMemberships as ugm, folders as f WHERE fm.folderId = f.id AND fm.userGroupId = ug.id AND ugm.userGroupId = ug.id AND ugm.userId = u.id AND u.id = 1;
 
 CREATE TABLE folderContent (
     blobHash char(64) COLLATE utf8_unicode_ci NOT NULL,

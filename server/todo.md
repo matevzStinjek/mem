@@ -1,6 +1,6 @@
 THIS PHASE:
-create visible/searchable folder query from userId
 discriminator pattern unclaimed vs registered user
+create visible/searchable folder query from userId
 add foldermembership via folderController
 controllers for UserGroup
 test folders with reg and unreg user
