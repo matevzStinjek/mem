@@ -27,7 +27,12 @@ class AuthFilter implements Filter {
     }
 
     private function getUser(Request $request) {
-        [$username, $secret] = explode(':', base64_decode(explode(' ', $request->getHeader('Authorization')[0])[1]));
+        $authHeader = $request->getHeader('Authorization');
+        if (!$authHeader) {
+            return new UnregisteredUser;
+        }
+
+        [$username, $secret] = explode(':', base64_decode(explode(' ', $authHeader[0])[1]));
 
         if (!$username) {
             return new UnregisteredUser;

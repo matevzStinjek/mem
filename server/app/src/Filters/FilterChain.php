@@ -7,7 +7,7 @@ use App\Application;
 class FilterChain {
 
     public static function registerMiddleware(Application $app) {
-        $container = $app->container;
+        $container = $app->getContainer();
 
         $filters = [
             new CorsFilter($container),
