@@ -2,6 +2,8 @@
 
 namespace App\Model\Permissions;
 
+use Doctrine\ORM\QueryBuilder;
+
 class PermissionsUnion extends Permissions {
 
     private $permissions = [];
@@ -20,5 +22,11 @@ class PermissionsUnion extends Permissions {
                 return true;
         }
         return false;
+    }
+
+    protected function defaultAddQueryBuilderConditions($queryName, QueryBuilder $qb) {
+        foreach ($this->permissions as $permission) {
+            $permission->{$queryName}($queryName, $qb);
+        }
     }
 }

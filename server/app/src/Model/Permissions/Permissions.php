@@ -32,10 +32,9 @@ abstract class Permissions {
      */
 
     protected function defaultAddQueryBuilderConditions($queryName, QueryBuilder $qb) {
-        $qb->andWhere('0=1'); // TODO: i guess?
     }
 
-    public function getVisibleRegisteredUsersQueryBuilder(EntityManager $em) {
+    final public function getVisibleRegisteredUsersQueryBuilder(EntityManager $em) {
         $qb = $em->createQueryBuilder()
             ->select('registeredUser')
             ->from('App\Model\Entities\RegisteredUser', 'registeredUser');
@@ -46,7 +45,7 @@ abstract class Permissions {
 
     protected function addVisibleRegisteredUsersQueryBuilderConditions(QueryBuilder $qb) { $this->defaultAddQueryBuilderConditions(__FUNCTION__, $qb); }
 
-    public function getVisibleUserGroupsQueryBuilder(EntityManager $em) {
+    final public function getVisibleUserGroupsQueryBuilder(EntityManager $em) {
         $qb = $em->createQueryBuilder()
             ->select('userGroup')
             ->from('App\Model\Entities\UserGroup', 'userGroup');
@@ -57,7 +56,7 @@ abstract class Permissions {
 
     protected function addVisibleUserGroupsQueryBuilderConditions(QueryBuilder $qb) { $this->defaultAddQueryBuilderConditions(__FUNCTION__, $qb); }
 
-    public function getVisibleFoldersQueryBuilder(EntityManager $em) {
+    final public function getVisibleFoldersQueryBuilder(EntityManager $em) {
         $qb = $em->createQueryBuilder()
             ->select('folder')
             ->from('App\Model\Entities\Folder', 'folder');
@@ -72,7 +71,7 @@ abstract class Permissions {
      * SEARCHABLE QUERY BUILDERS
      */
 
-    public function getSearchableRegisteredUsersQueryBuilder(EntityManager $em) {
+    final public function getSearchableRegisteredUsersQueryBuilder(EntityManager $em) {
         $qb = $em->createQueryBuilder()
             ->select('registeredUser')
             ->from('App\Model\Entities\RegisteredUser', 'registeredUser');
@@ -83,7 +82,7 @@ abstract class Permissions {
 
     protected function addSearchableRegisteredUsersQueryBuilderConditions(QueryBuilder $qb) { $this->defaultAddQueryBuilderConditions(__FUNCTION__, $qb); }
 
-    public function getSearchableUserGroupsQueryBuilder(EntityManager $em) {
+    final public function getSearchableUserGroupsQueryBuilder(EntityManager $em) {
         $qb = $em->createQueryBuilder()
             ->select('userGroup')
             ->from('App\Model\Entities\UserGroup', 'userGroup');
@@ -94,7 +93,7 @@ abstract class Permissions {
 
     protected function addSearchableUserGroupsQueryBuilderConditions(QueryBuilder $qb) { $this->defaultAddQueryBuilderConditions(__FUNCTION__, $qb); }
 
-    public function getSearchableFoldersQueryBuilder(EntityManager $em) {
+    final public function getSearchableFoldersQueryBuilder(EntityManager $em) {
         $qb = $em->createQueryBuilder()
             ->select('folder')
             ->from('App\Model\Entities\Folder', 'folder');
@@ -104,4 +103,8 @@ abstract class Permissions {
     }
 
     protected function addSearchableFoldersQueryBuilderConditions(QueryBuilder $qb) { $this->defaultAddQueryBuilderConditions(__FUNCTION__, $qb); }
+
+    public function __toString() {
+        return get_called_class();
+    }
 }

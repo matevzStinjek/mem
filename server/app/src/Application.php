@@ -46,13 +46,4 @@ class Application extends App {
     public function createS3Client() {
         return new S3Client($this->config->s3);
     }
-
-    public function __get($name) {
-        switch ($name) {
-            case 'container':
-                return $this->getContainer();
-            default:
-                throw new \Exception("Propery $name is not available.");
-        }
-    }
 }
