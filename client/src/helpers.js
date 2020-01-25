@@ -1,23 +1,21 @@
+import { getType } from '@/common/util/util.js'
+
 const capitalize = value =>  value[0].toUpperCase() + value.slice(1)
 
 const prefix = (value, prefix) => {
-    const prefixValue = (x) => {
-        if (Array.isArray(x)) {
-            return x.map(prefixValue)
-        } else if (typeof x === 'object') {
+    const prefixValue = input => {
+        switch (getType(input)) {
+        case 'Array':
+            return input.map(prefixValue)
+        case 'Object':
             const prefixed = {}
-            for (const key in x) {
-                prefixed[prefix + key] = x[key]
-            }
+            Object.keys(input).forEach(key => prefixed[`${prefix}${input}`] = input[key])
             return prefixed
-        } else {
-            return prefix + x
+        case 'String':
+            return `${prefix}${input}`
         }
     }
 
-    if (value == null) {
-        return null
-    }
     return prefixValue(value)
 }
 

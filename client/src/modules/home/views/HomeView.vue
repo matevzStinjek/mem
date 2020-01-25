@@ -23,7 +23,7 @@ export default {
         Sidebar,
     },
     created () {
-        apiClient.get('users?roles=admin')
+        apiClient.get('users').then(e => console.log(e))
     }
 }
 </script>
