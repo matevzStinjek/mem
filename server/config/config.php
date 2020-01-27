@@ -23,7 +23,7 @@ return [
         'aws' => [
             's3' => [
                 'meta' => [
-                    'bucket' => 'mem-buckoo',
+                    'bucket' => getenv('AWS_BUCKET'),
                 ],
                 'connection' => [
                     'region'      => 'us-east-1',

@@ -55,14 +55,13 @@ class FolderController extends AbstractController {
         $resourceMap = [];
 
         $resourceMap += [
-            'id'                => function($folder) use ($ctx) { return $folder->getId(); },
-            'name'              => function($folder) use ($ctx) { return $folder->getName(); },
-            'creator'           => function($folder) use ($ctx) { return UserController::asJson($folder->getCreator(), null, $ctx); },
-            'members'           => function($folder) use ($ctx) { return array_map(fn($user) => $user->getId(), $folder->getMembers()); },
+            'id'                => fn($folder) => $folder->getId(),
+            'name'              => fn($folder) => $folder->getName(),
+            'creator'           => fn($folder) => UserController::asJson($folder->getCreator(), null, $ctx),
+            'members'           => fn($folder) => array_map(fn($user) => $user->getId(), $folder->getMembers()),
             'creationTimestamp' => function($folder) use ($ctx) { return $folder->getCreationTimestamp()->format('Y-m-d H:i:s'); },
         ];
 
         return ResourceHelper::mapValues($folder, $resourceMap, $fields);
     }
-
 }
