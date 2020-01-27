@@ -1,3 +1,8 @@
+NOW:
+think about client structure, routes (split vue apps wise), figure out how to share npm packages etc
+serve static files & endpoints for them
+rethink structure, i guess (folder structue wise)
+
 THIS PHASE:
 discriminator pattern unclaimed vs registered user
 create visible/searchable folder query from userId

@@ -30,6 +30,10 @@ class Config {
         return $this->config['settings']['doctrine'];
     }
 
+    public function getPublicDir() {
+        return $this->config['publicDir'];
+    }
+
     public function __get($name) {
         switch ($name) {
             case 'baseUrl':
@@ -44,6 +48,8 @@ class Config {
                 return $this->getS3Config();
             case 'doctrine':
                 return $this->getDoctrineConfig();
+            case 'publicDir':
+                return $this->getPublicDir();
             default:
                 throw new \Exception("Propery $name is not available.");
         }

@@ -27,9 +27,25 @@ class Router {
         // 'blobs/{hash}'          => 'BlobController',
     ];
 
+    const CLIENT_ENDPOINTS = [
+        '/auth'                  => '/auth/index.php',
+        '/*'                  => '/404/index.php',
+    ];
+
     public static function registerRouteCallbacks(Application $app) {
         foreach(self::API_ENDPOINTS as $route => $controller) {
             $app->any(self::API_PREFIX . $route, "App\\Controllers\\$controller");
+        }
+
+        $publicDir = $app->getContainer()->get('config')->publicDir;
+
+        foreach(self::CLIENT_ENDPOINTS as $route => $path) {
+            $path = $publicDir . $path;
+
+            $app->get($route, function($request, $response, $args) use ($path) {
+                $response->getBody()->write(file_get_contents($path));
+                return $response;
+            });
         }
     }
 }
