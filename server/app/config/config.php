@@ -39,4 +39,5 @@ return [
             'secret' => getenv('DB_SECRET'),
         ],
     ],
+    'publicDir' => __DIR__ . '/../../../client/public'
 ];
