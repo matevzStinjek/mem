@@ -24,9 +24,9 @@ class PermissionsUnion extends Permissions {
         return false;
     }
 
-    protected function defaultAddQueryBuilderConditions($queryName, QueryBuilder $qb) {
+    protected function defaultAddQueryBuilderConditions($queryName, QueryBuilder $qb, &$permissionExpr) {
         foreach ($this->permissions as $permission) {
-            $permission->{$queryName}($queryName, $qb);
+            $permission->{$queryName}($qb, $permissionExpr);
         }
     }
 }
