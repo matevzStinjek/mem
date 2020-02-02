@@ -1,3 +1,3 @@
-# Matevinho Diploma Thesis Project And Also Multi trillion dollar startup
+Ad hoc groups for photo sharing between users with heterogeneous identities
 
-so sori, no more info
+Project abandoned due to a change of diploma thesis title

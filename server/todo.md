@@ -1,17 +1,24 @@
+NOW:
+think about client structure, routes (split vue apps wise), figure out how to share npm packages etc
+serve static files & endpoints for them
+rethink structure, i guess (folder structue wise)
+
+THIS PHASE:
+discriminator pattern unclaimed vs registered user
+create visible/searchable folder query from userId
+add foldermembership via folderController
+controllers for UserGroup
+test folders with reg and unreg user
+
 NEXT PHASE:
 * server side cookie sessions
 * check s3 again, blobcontroller
-* architecture foldermembership, usergroupmembership
 * blob <> assetcontroller <> foldercontent relationship
-* usersgroups <> foldersMembership <> folder
 * UserGroupController.php && Resource
 * facebook login integration
-* FolderMembershipsController.php
-* limit User(s)Controller api with permissions
 
 PHASE + 1:
 * censor github settings history
-* discriminator pattern doctrine
 * s3 stream video
 * fetch blobs of thumbnail/parameter size (?size=300x200) (aws lambda)
 * remove unneeded packages like doctrine/annotations
