@@ -1,14 +1,29 @@
 import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import Helpers from './helpers'
+import { Dependencies } from '@/dependencies'
+import { RouterModule } from '@/modules/router'
+import { StoreModule } from '@/modules/store'
+import { CoreModule } from '@/modules/core'
+import { SubredditModule } from '@/modules/subreddit'
 
-Helpers.install(Vue)
 Vue.config.productionTip = false
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+function bootstrap () {
+    const dependencies = new Dependencies()
+    dependencies.install(Vue)
+
+    const routerModule = new RouterModule()
+    routerModule.install(Vue)
+
+    const storeModule = new StoreModule()
+    storeModule.install(Vue)
+
+    const coreModule = new CoreModule(routerModule.router, storeModule.store)
+    coreModule.install(Vue)
+
+    const subredditModule = new SubredditModule(routerModule.router, storeModule.store)
+    subredditModule.install(Vue)
+
+    coreModule.mount()
+}
+
+bootstrap()
